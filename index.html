@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Registro de Usuario</title>
+  <style>
+    :root { --ok:#22c55e; --err:#ef4444; --bg:#0f172a; --card:#111827; --txt:#e5e7eb; --muted:#9ca3af; }
+    *{box-sizing:border-box} body{margin:0;font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial;
+      background:linear-gradient(180deg,#0b1220,#0f172a 40%); color:var(--txt); min-height:100vh; display:grid; place-items:center}
+    .card{width:min(520px,92vw); background:var(--card); border:1px solid #1f2937; border-radius:16px; padding:22px 20px; box-shadow:0 10px 30px rgba(0,0,0,.35)}
+    h1{margin:0 0 4px;font-size:1.35rem} p{margin:.25rem 0 1rem;color:var(--muted)}
+    label{display:block; font-size:.9rem; margin:.6rem 0 .35rem}
+    .field{position:relative}
+    input, select, button{width:100%; padding:12px 14px; border-radius:12px; border:1px solid #374151; background:#0b1220; color:var(--txt); outline:none}
+    input:focus{border-color:#60a5fa; box-shadow:0 0 0 4px rgba(59,130,246,.15)}
+    .row{display:grid; gap:12px}
+    .ok{border-color:var(--ok)!important} .err{border-color:var(--err)!important}
+    .hint{font-size:.8rem; color:var(--muted); margin-top:6px}
+    .eye{position:absolute; right:10px; top:50%; transform:translateY(-50%); background:transparent; border:none; color:var(--muted); cursor:pointer}
+    .msg{margin-top:14px; padding:10px 12px; border-radius:12px; font-size:.95rem; display:none}
+    .msg.ok{display:block; background:rgba(34,197,94,.12); border:1px solid var(--ok); color:#d1fae5}
+    .msg.err{display:block; background:rgba(239,68,68,.12); border:1px solid var(--err); color:#fee2e2}
+    .actions{display:flex; gap:10px; margin-top:14px}
+    .btn{cursor:pointer; border:1px solid #374151; background:#0b1220}
+    .btn.primary{background:#2563eb;border-color:#2563eb}
+    .nav{margin-top:16px; text-align:center}
+    a{color:#93c5fd; text-decoration:none} a:hover{text-decoration:underline}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>Registro de Usuario</h1>
+    <p>Completa los campos. Se valida en tiempo real (borde <span style="color:#22c55e">verde</span> = OK / <span style="color:#ef4444">rojo</span> = error). Podés mostrar/ocultar la contraseña.</p>
+
+    <form id="form-registro" novalidate>
+      <div class="row">
+        <div>
+          <label for="nombre">Nombre *</label>
+          <input id="nombre" name="nombre" autocomplete="name" placeholder="Ej: Ana Pérez" required />
+          <div class="hint" id="hint-nombre">Mínimo 2 caracteres.</div>
+        </div>
+
+        <div>
+          <label for="email">Email *</label>
+          <input id="email" name="email" type="email" autocomplete="email" placeholder="ana@email.com" required />
+          <div class="hint" id="hint-email">Debe tener formato válido (usuario@dominio).</div>
+        </div>
+
+        <div class="field">
+          <label for="password">Contraseña *</label>
+          <input id="password" name="password" type="password" placeholder="Mín. 8, 1 mayús, 1 min, 1 número" required />
+          <button type="button" class="eye" id="togglePwd" aria-label="Mostrar u ocultar contraseña">👁️</button>
+          <div class="hint" id="hint-password">Ej: Equipo2025</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" type="reset">Limpiar</button>
+        <button class="btn primary" type="submit">Registrarme</button>
+      </div>
+
+      <div id="msg" class="msg"></div>
+    </form>
+
+    <div class="nav">
+      <a href="productos.html">Ir al Listado de Productos →</a>
+    </div>
+  </main>
+
+  <script>
+    const $ = s => document.querySelector(s);
+    const nombre = $('#nombre'), email = $('#email'), pass = $('#password'), msg = $('#msg');
+
+    const reEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    const rePwd = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+    const vNombre = () => setState(nombre, nombre.value.trim().length >= 2);
+    const vEmail  = () => setState(email,  reEmail.test(email.value.trim()));
+    const vPwd    = () => setState(pass,   rePwd.test(pass.value.trim()));
+
+    function setState(input, ok){
+      input.classList.toggle('ok', ok);
+      input.classList.toggle('err', !ok);
+      return ok;
+    }
+
+    nombre.addEventListener('input', vNombre);
+    email .addEventListener('input', vEmail);
+    pass  .addEventListener('input', vPwd);
+
+    $('#togglePwd').addEventListener('click', ()=>{
+      pass.type = pass.type === 'password' ? 'text' : 'password';
+    });
+
+    $('#form-registro').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const ok = [vNombre(), vEmail(), vPwd()].every(Boolean);
+      if(!ok){
+        msg.className = 'msg err';
+        msg.textContent = 'Hay campos con errores. Revisá los bordes en rojo.';
+        return;
+      }
+      // Simula registro exitoso
+      msg.className = 'msg ok';
+      msg.textContent = '✅ Registro exitoso. ¡Bienvenida/o!';
+      // Opcional: guardar en localStorage para usar en productos
+      localStorage.setItem('usuario', JSON.stringify({nombre:nombre.value.trim(), email:email.value.trim()}));
+      // Limpieza visual
+      [nombre,email,pass].forEach(i=>i.classList.remove('ok','err'));
+    });
+  </script>
+</body>
+</html>
