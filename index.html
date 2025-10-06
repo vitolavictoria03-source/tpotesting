@@ -4,37 +4,36 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Registro de Usuario</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-  <style>
-    /* Popup */
-    .overlay{position:fixed;inset:0;display:none;justify-content:center;align-items:center;background:rgba(0,0,0,.6);z-index:9999}
-    .popup{background:#fff;color:#111;width:min(90vw,420px);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.3);padding:20px;text-align:center}
-    .popup h2{margin:0 0 8px;font-size:1.2rem}
-    .popup button{margin-top:12px;padding:8px 14px;border:none;border-radius:8px;background:#2563eb;color:#fff;cursor:pointer}
-
-    /* Campo password + ojo */
-    .field{position:relative}
-    #togglePwd{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:transparent;border:none;cursor:pointer;padding:4px;color:#666}
-
-    /* Reglas de contraseña */
-    .rules{background:rgba(255,255,255,.06);border-radius:8px;padding:10px 14px;margin-top:6px;font-size:.9rem}
-    .rules ul{list-style:none;margin:0;padding:0}
-    .rules li{margin:2px 0;color:#e5e7eb}
-    .rules li.ok{color:#22c55e} /* cumple */
-    .rules li.err{color:#ef4444} /* no cumple */
-
-    /* Mensajes */
-    .msg{margin-top:10px;padding:8px 12px;border-radius:10px}
-    .msg.err{background:rgba(239,68,68,.15);border:1px solid #ef4444;color:#fee2e2}
-    .msg.ok{background:rgba(34,197,94,.15);border:1px solid #22c55e;color:#d1fae5}
-
-    /* (Tus estilos globales de .card, .btn, etc. van aparte) */
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+    /* Sólo estilos del popup; el resto de estilos (btn, card, etc.) usá tu CSS */
+    .overlay {
+      position: fixed; inset: 0; display: none; /* oculto */
+      justify-content: center; align-items: center;
+      background: rgba(0,0,0,.6); z-index: 9999;
+    }
+    .popup {
+      background: #fff; color: #111; width: min(90vw, 420px);
+      border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.3);
+      padding: 20px; text-align: center;
+    }
+    .popup h2 { margin: 0 0 8px; font-size: 1.2rem; }
+    .popup button {
+      margin-top: 12px; padding: 8px 14px; border: none; border-radius: 8px;
+      background: #2563eb; color: #fff; cursor: pointer;
+    }
+    .field { position: relative; }
+    #togglePwd {
+      position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+      background: transparent; border: none; cursor: pointer;
+      padding: 4px; color: #666;
+    }
   </style>
 </head>
 <body class="center">
   <main class="card">
-    <h1>Bienvenidos usuarios</h1>
-    <p>Completa los datos para registrarse</p>
+    <h1>Registro de Usuario</h1>
+    <p>Completa los campos</p>
 
     <form id="form-registro" novalidate>
       <label for="nombre">Nombre:</label>
@@ -44,39 +43,27 @@
       <input id="email" type="email" required placeholder="ana@email.com">
 
       <div class="field">
-        <label for="password">Contraseña:</label>
+        <label for="password">Contraseña</label>
         <input id="password" type="password" placeholder="Ingresá tu contraseña">
-        <button type="button" id="togglePwd" aria-label="Mostrar/Ocultar contraseña">
+        <button type="button" id="togglePwd">
           <i class="bi bi-eye"></i>
         </button>
-
-        <!-- Indicador dinámico de reglas -->
-        <div id="password-rules" class="rules">
-          <p>La contraseña debe contener:</p>
-          <ul>
-            <li id="rule-lower" class="err">• Una <strong>minúscula</strong></li>
-            <li id="rule-upper" class="err">• Una <strong>mayúscula</strong></li>
-            <li id="rule-num"   class="err">• Un <strong>número</strong></li>
-            <li id="rule-len"   class="err">• Mínimo <strong>5 caracteres</strong></li>
-          </ul>
-        </div>
       </div>
 
-      <div class="actions">
+     <div class="actions">
         <button class="btn" type="button" id="loginBtn">Iniciar sesión</button>
         <button class="btn primary" type="submit">Registrarme</button>
       </div>
       <div id="msg" class="msg" style="display:none"></div>
     </form>
 
-    <!-- POPUP -->
-    <div id="overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
-      <div class="popup">
-        <h2 id="popupTitle">✅ Registro exitoso</h2>
-        <p>Tu cuenta se creó correctamente</p>
-        <button id="closeBtn">Siguiente</button>
+      <div id="overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
+        <div class="popup">
+          <h2 id="popupTitle">✅ Registro exitoso</h2>
+          <p>Tu cuenta se creó correctamente</p>
+          <button id="closeBtn" href="productos.html">Siguiente</button>
+        </div>
       </div>
-    </div>
 
     <div class="nav"><a href="productos.html">Listado de productos →</a></div>
   </main>
@@ -85,19 +72,10 @@
     const $ = s => document.querySelector(s);
     const nombre = $('#nombre'), email = $('#email'), pass = $('#password'), msg = $('#msg');
     const form = $('#form-registro');
-
-    // Validaciones
     const reEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-    const rePwd   = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{5,}$/;
+    const rePwd = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{5,}$/;
 
-    function setState(input, ok){ input.classList.toggle('ok', ok); input.classList.toggle('err', !ok); return ok; }
-    const vNombre = () => setState(nombre, nombre.value.trim().length >= 2);
-    const vEmail  = () => setState(email,  reEmail.test(email.value.trim()));
-    const vPwd    = () => setState(pass,   rePwd.test(pass.value.trim()));
-
-    [nombre, email].forEach(i => i.addEventListener('input', () => { if(i===nombre) vNombre(); if(i===email) vEmail(); }));
-
-    // Ojo mostrar/ocultar
+    // Mostrar/ocultar contraseña con icono de Bootstrap
     const toggle = $('#togglePwd');
     const icon = toggle.querySelector('i');
     toggle.addEventListener('click', () => {
@@ -107,46 +85,39 @@
       icon.classList.toggle('bi-eye-slash', show);
     });
 
-    // Reglas dinámicas de contraseña
-    const ruleLower = $('#rule-lower');
-    const ruleUpper = $('#rule-upper');
-    const ruleNum   = $('#rule-num');
-    const ruleLen   = $('#rule-len');
+    // Validaciones rápidas
+    function setState(input, ok){ input.classList.toggle('ok', ok); input.classList.toggle('err', !ok); return ok; }
+    const vNombre = () => setState(nombre, nombre.value.trim().length >= 2);
+    const vEmail  = () => setState(email,  reEmail.test(email.value.trim()));
+    const vPwd    = () => setState(pass,   rePwd.test(pass.value.trim()));
+    [nombre, email, pass].forEach(i => i.addEventListener('input', () => {
+      if(i===nombre) vNombre(); if(i===email) vEmail(); if(i===pass) vPwd();
+    }));
 
-    pass.addEventListener('input', () => {
-      const val = pass.value;
-      ruleLower.className = /[a-z]/.test(val) ? 'ok' : 'err';
-      ruleUpper.className = /[A-Z]/.test(val) ? 'ok' : 'err';
-      ruleNum.className   = /\d/.test(val)    ? 'ok' : 'err';
-      ruleLen.className   = val.length >= 5   ? 'ok' : 'err';
-      vPwd(); // mantiene el estado de borde si usás estilos .ok/.err
-    });
-
-    // Popup
+    // Popup refs
     const overlay = $('#overlay');
     const closeBtn = $('#closeBtn');
 
+    // Submit → mostrar popup si todo OK
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const ok = [vNombre(), vEmail(), vPwd()].every(Boolean);
       if (!ok) {
+        // si querés usar el msg clásico, quitá el style="display:none" de #msg
         msg.style.display = 'block';
         msg.className = 'msg err';
         msg.textContent = 'Hay campos con errores';
         return;
       }
+      // Guardar usuario simulado
       localStorage.setItem('usuario', JSON.stringify({ nombre: nombre.value.trim(), email: email.value.trim() }));
+      // Abrir popup
       overlay.style.display = 'flex';
     });
 
-    // Cerrar popup → ir a productos
-    closeBtn.addEventListener('click', () => {
-      overlay.style.display = 'none';
-      window.location.href = 'productos.html';
-    });
-
+    // Cerrar popup
+    closeBtn.addEventListener('click', () => overlay.style.display = 'none');
     overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.style.display = 'none'; });
   </script>
 </body>
 </html>
-
