@@ -4,31 +4,40 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Registro de Usuario</title>
-   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+   <title>Registro de Usuario</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
-    /* Sólo estilos del popup; el resto de estilos (btn, card, etc.) usá tu CSS */
-    .overlay {
-      position: fixed; inset: 0; display: none; /* oculto */
-      justify-content: center; align-items: center;
-      background: rgba(0,0,0,.6); z-index: 9999;
-    }
-    .popup {
-      background: #fff; color: #111; width: min(90vw, 420px);
-      border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.3);
-      padding: 20px; text-align: center;
-    }
-    .popup h2 { margin: 0 0 8px; font-size: 1.2rem; }
-    .popup button {
-      margin-top: 12px; padding: 8px 14px; border: none; border-radius: 8px;
-      background: #2563eb; color: #fff; cursor: pointer;
-    }
-    .field { position: relative; }
-    #togglePwd {
-      position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
-      background: transparent; border: none; cursor: pointer;
-      padding: 4px; color: #666;
-    }
-  </style>
+      * {
+          font-family: Arial, Helvetica, sans-serif;
+        }
+
+      /* Popups */
+      .overlay {
+        position: fixed; inset: 0; display: none; /* oculto */
+        justify-content: center; align-items: center;
+        background: rgba(0,0,0,.6); z-index: 9999;
+      }
+      .popup {
+        background: #fff; color: #111; width: min(90vw, 420px);
+        border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.3);
+        padding: 20px; text-align: center;
+      }
+      .popup h2 { margin: 0 0 8px; font-size: 1.2rem; }
+      .popup p { margin: .25rem 0 .75rem; }
+      .popup ul { text-align:left; margin:.25rem 0 .75rem 1.2rem; }
+      .popup .btn {
+        margin-top: 12px; padding: 8px 14px; border: none; border-radius: 8px;
+        background: #2563eb; color: #fff; cursor: pointer;
+      }
+
+      /* Campo password */
+      .field { position: relative; }
+      #togglePwd {
+        position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+        background: transparent; border: none; cursor: pointer;
+        padding: 4px; color: #666;
+      }
+    </style>
 </head>
 <body class="center">
   <main class="card">
@@ -44,35 +53,55 @@
 
       <div class="field">
         <label for="password">Contraseña</label>
-        <input id="password" type="password" placeholder="Ingresá tu contraseña">
-        <button type="button" id="togglePwd">
+        <input id="password" type="password" placeholder="Ingresá tu contraseña" />
+        <button type="button" id="togglePwd" aria-label="Mostrar/Ocultar contraseña">
           <i class="bi bi-eye"></i>
         </button>
       </div>
 
      <div class="actions">
-        <button class="btn" type="button" id="loginBtn">Iniciar sesión</button>
         <button class="btn primary" type="submit">Registrarme</button>
+        <a href="Login.html">¿Ya tienes usuario?</a>
       </div>
       <div id="msg" class="msg" style="display:none"></div>
     </form>
-
-      <div id="overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
-        <div class="popup">
-          <h2 id="popupTitle">✅ Registro exitoso</h2>
-          <p>Tu cuenta se creó correctamente</p>
-          <button id="closeBtn" href="productos.html">Siguiente</button>
-        </div>
+<!-- POPUP: Éxito -->
+    <div id="overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
+      <div class="popup">
+        <h2 id="popupTitle">✅ Registro exitoso</h2>
+        <p>Tu cuenta se creó correctamente</p>
+        <button class="btn" id="closeBtn">Siguiente</button>
       </div>
+    </div>
 
-    <div class="nav"><a href="productos.html">Listado de productos →</a></div>
+    <!-- POPUP: Campos vacíos -->
+    <div id="pop-empty" class="overlay" role="dialog" aria-modal="true" aria-labelledby="emptyTitle">
+      <div class="popup">
+        <h2 id="emptyTitle">⚠️ Campos vacíos</h2>
+        <p>Completá <strong>nombre, email y contraseña</strong> para continuar.</p>
+        <button class="btn" data-close="pop-empty">Entendido</button>
+      </div>
+    </div>
+
+    <!-- POPUP: Faltan datos / inválidos -->
+    <div id="pop-missing" class="overlay" role="dialog" aria-modal="true" aria-labelledby="missingTitle">
+      <div class="popup">
+        <h2 id="missingTitle">⚠️ Faltan datos válidos</h2>
+        <p>Revisá lo siguiente:</p>
+        <ul id="missing-list"></ul>
+        <button class="btn" data-close="pop-missing">Corregir</button>
+      </div>
+    </div>
   </main>
 
   <script>
     const $ = s => document.querySelector(s);
     const nombre = $('#nombre'), email = $('#email'), pass = $('#password'), msg = $('#msg');
     const form = $('#form-registro');
+
+    // Validación de Email
     const reEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    // Validación de contraseña (1 minúscula, 1 mayúscula, 1 número, mín. 5)
     const rePwd = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{5,}$/;
 
     // Mostrar/ocultar contraseña con icono de Bootstrap
@@ -85,6 +114,11 @@
       icon.classList.toggle('bi-eye-slash', show);
     });
 
+    // Helpers popups
+    function openPopup(id){ document.getElementById(id).style.display = 'flex'; }
+    function closePopup(id){ document.getElementById(id).style.display = 'none'; }
+    document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closePopup(b.getAttribute('data-close'))));
+
     // Validaciones rápidas
     function setState(input, ok){ input.classList.toggle('ok', ok); input.classList.toggle('err', !ok); return ok; }
     const vNombre = () => setState(nombre, nombre.value.trim().length >= 2);
@@ -94,31 +128,50 @@
       if(i===nombre) vNombre(); if(i===email) vEmail(); if(i===pass) vPwd();
     }));
 
-    // Popup refs
-    const overlay = $('#overlay');
-    const closeBtn = $('#closeBtn');
+    // Submit → popups según el caso
+    const overlay = $('#overlay');      // éxito
+    const closeBtn = $('#closeBtn');    // botón éxito
 
-    // Submit → mostrar popup si todo OK
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const ok = [vNombre(), vEmail(), vPwd()].every(Boolean);
-      if (!ok) {
-        // si querés usar el msg clásico, quitá el style="display:none" de #msg
-        msg.style.display = 'block';
-        msg.className = 'msg err';
-        msg.textContent = 'Hay campos con errores';
+      msg.style.display = 'none';
+
+      const n = nombre.value.trim();
+      const m = email.value.trim();
+      const p = pass.value.trim();
+
+      // 1) Todos vacíos
+      if (!n && !m && !p) { openPopup('pop-empty'); return; }
+
+      // 2) Faltantes/incorrectos
+      const faltantes = [];
+      if (n.length < 2) faltantes.push('• Nombre: mínimo 2 caracteres.');
+      if (!reEmail.test(m)) faltantes.push('• Email con formato válido (usuario@dominio).');
+      if (!rePwd.test(p))  faltantes.push('• Contraseña: 1 mayúscula, 1 minúscula, 1 número y mínimo 5 caracteres.');
+
+      if (faltantes.length > 0) {
+        $('#missing-list').innerHTML = faltantes.map(x => `<li>${x}</li>`).join('');
+        openPopup('pop-missing');
         return;
       }
-      // Guardar usuario simulado
-      localStorage.setItem('usuario', JSON.stringify({ nombre: nombre.value.trim(), email: email.value.trim() }));
-      // Abrir popup
+
+      // 3) Todo OK → guardar y éxito
+      localStorage.setItem('usuario', JSON.stringify({ nombre: n, email: m }));
       overlay.style.display = 'flex';
     });
 
-    // Cerrar popup
-    closeBtn.addEventListener('click', () => overlay.style.display = 'none');
-    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.style.display = 'none'; });
+    // Cerrar popup de éxito → continuar
+    closeBtn.addEventListener('click', () => {
+      overlay.style.display = 'none';
+      // Redirige si querés:
+      window.location.href = 'productos.html';
+    });
+
+    // Cerrar popups haciendo clic fuera
+    ['overlay','pop-empty','pop-missing'].forEach(id=>{
+      const el = document.getElementById(id);
+      el.addEventListener('click', e => { if(e.target === el) el.style.display = 'none'; });
+    });
   </script>
 </body>
 </html>
-
