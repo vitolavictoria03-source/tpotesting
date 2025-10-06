@@ -4,62 +4,30 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Listado de Productos</title>
-  <style>
-    :root{--bg:#0f172a;--card:#111827;--txt:#e5e7eb;--muted:#9ca3af;--line:#1f2937;--brand:#2563eb}
-    *{box-sizing:border-box} body{margin:0;font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial;background:linear-gradient(180deg,#0b1220,#0f172a 40%);color:var(--txt);min-height:100vh}
-    header{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line);background:#0b1220;position:sticky;top:0;z-index:10}
-    h1{font-size:1.1rem;margin:0}
-    .wrap{max-width:1100px;margin:18px auto;padding:0 16px}
-    .toolbar{display:grid;grid-template-columns:1fr 170px 170px 140px;gap:10px;margin-bottom:12px}
-    input,select,button{width:100%;padding:10px 12px;border-radius:12px;border:1px solid #374151;background:#0b1220;color:var(--txt);outline:none}
-    input:focus,select:focus{border-color:#60a5fa; box-shadow:0 0 0 4px rgba(59,130,246,.15)}
-    table{width:100%;border-collapse:collapse;background:var(--card);border-radius:14px;overflow:hidden;border:1px solid var(--line)}
-    th,td{padding:12px 10px;border-bottom:1px solid var(--line);font-size:.95rem}
-    th{background:#0b1220;text-align:left}
-    tr:hover td{background:#0e1628}
-    .empty{padding:16px;border:1px dashed #374151;border-radius:12px;color:var(--muted);text-align:center;margin-top:12px}
-    .pager{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
-    .btn{cursor:pointer}
-    .badge{display:inline-block;padding:2px 8px;border-radius:999px;background:#0b1220;border:1px solid #1f2937;color:#cbd5e1;font-size:.75rem}
-    a{color:#93c5fd;text-decoration:none} a:hover{text-decoration:underline}
-  </style>
 </head>
 <body>
   <header>
     <h1>Productos</h1>
     <div id="saludo"></div>
   </header>
-
   <div class="wrap">
-    <!-- Controles: búsqueda, categoría, orden por precio, cantidad por página -->
     <div class="toolbar">
-      <input id="q" placeholder="🔎 Buscar por nombre..." />
-      <select id="cat"><option value="">Todas las categorías</option></select>
+      <input id="q" placeholder="Buscar por nombre...">
+      <select id="cat"><option value="">Todas</option></select>
       <select id="sort">
-        <option value="price-asc">Precio: menor a mayor</option>
-        <option value="price-desc">Precio: mayor a menor</option>
-        <option value="name-asc">Nombre: A → Z</option>
-        <option value="name-desc">Nombre: Z → A</option>
+        <option value="price-asc">Precio ↑</option>
+        <option value="price-desc">Precio ↓</option>
       </select>
       <select id="pp">
         <option value="5">5 por página</option>
-        <option value="10" selected>10 por página</option>
-        <option value="20">20 por página</option>
+        <option value="10" selected>10</option>
+        <option value="20">20</option>
       </select>
     </div>
 
-    <div style="overflow:auto;border-radius:14px">
-      <table id="grid">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Categoría</th>
-            <th style="width:160px">Precio</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
+    <table id="grid"><thead>
+      <tr><th>Nombre</th><th>Categoría</th><th>Precio</th></tr>
+    </thead><tbody></tbody></table>
 
     <div id="empty" class="empty" style="display:none">No se encontraron resultados.</div>
 
@@ -68,99 +36,29 @@
       <span class="badge" id="info">Página 1/1</span>
       <button class="btn" id="next">Siguiente ⟶</button>
     </div>
-
-    <p style="margin-top:14px"><a href="index.html">← Volver al registro</a></p>
+    <p><a href="index.html">← Volver al registro</a></p>
   </div>
 
   <script>
-    // Datos de muestra (podés reemplazar por fetch a una API o JSON)
-    const DATA = [
-      {name:'Auriculares Bluetooth', category:'Audio', price: 29999},
-      {name:'Teclado Mecánico', category:'Periféricos', price: 45999},
-      {name:'Mouse Gamer', category:'Periféricos', price: 24999},
-      {name:'Monitor 24"', category:'Pantallas', price: 149999},
-      {name:'Monitor 27"', category:'Pantallas', price: 229999},
-      {name:'Notebook 14"', category:'Computadoras', price: 899999},
-      {name:'Smartphone 6.5"', category:'Celulares', price: 499999},
-      {name:'Cargador USB-C', category:'Accesorios', price: 11999},
-      {name:'Cable HDMI 2m', category:'Accesorios', price: 7999},
-      {name:'Parlante Portátil', category:'Audio', price: 39999},
-      {name:'Hub USB 4 puertos', category:'Accesorios', price: 15999},
-      {name:'Silla Ergonómica', category:'Muebles', price: 199999},
-      {name:'Webcam 1080p', category:'Periféricos', price: 32999},
-      {name:'Disco SSD 1TB', category:'Almacenamiento', price: 189999},
-      {name:'Memoria RAM 16GB', category:'Almacenamiento', price: 99999},
-    ];
-
-    const $ = s => document.querySelector(s);
-    const $$ = s => Array.from(document.querySelectorAll(s));
-    const tbody = $('#grid tbody');
-    const q = $('#q'), cat = $('#cat'), sort = $('#sort'), pp = $('#pp');
-    const prev = $('#prev'), next = $('#next'), info = $('#info'), empty = $('#empty');
-
-    // Saludo si venís del registro
-    const user = JSON.parse(localStorage.getItem('usuario') || 'null');
-    if(user){ document.getElementById('saludo').textContent = `Hola, ${user.nombre}`; }
-
-    // Estado de UI / paginación
-    let state = { page:1, perPage: +pp.value, query:'', category:'', sort:'price-asc' };
-
-    // Rellenar categorías únicas
-    [...new Set(DATA.map(d => d.category))].sort().forEach(c => {
-      const opt = document.createElement('option'); opt.value = c; opt.textContent = c; cat.appendChild(opt);
-    });
-
-    // Eventos
-    q.addEventListener('input', ()=>{ state.query = q.value.trim().toLowerCase(); state.page=1; render(); });
-    cat.addEventListener('change', ()=>{ state.category = cat.value; state.page=1; render(); });
-    sort.addEventListener('change', ()=>{ state.sort = sort.value; render(); });
-    pp.addEventListener('change', ()=>{ state.perPage = +pp.value; state.page=1; render(); });
-    prev.addEventListener('click', ()=>{ if(state.page>1){ state.page--; render(); }});
-    next.addEventListener('click', ()=>{ if(state.page<totalPages()){ state.page++; render(); }});
-
-    function applyFilters(data){
-      let out = data;
-      if(state.query) out = out.filter(x => x.name.toLowerCase().includes(state.query));
-      if(state.category) out = out.filter(x => x.category === state.category);
-      out = out.slice().sort((a,b)=>{
-        switch(state.sort){
-          case 'price-asc': return a.price - b.price;
-          case 'price-desc': return b.price - a.price;
-          case 'name-asc': return a.name.localeCompare(b.name, 'es');
-          case 'name-desc': return b.name.localeCompare(a.name, 'es');
-        }
-      });
-      return out;
-    }
-
-    function totalPages(){ return Math.max(1, Math.ceil(applyFilters(DATA).length / state.perPage)); }
-
-    function paged(data){
-      const start = (state.page-1)*state.perPage;
-      return data.slice(start, start + state.perPage);
-    }
-
-    function money(n){ return n.toLocaleString('es-AR', {style:'currency', currency:'ARS'}); }
-
-    function render(){
-      const filtered = applyFilters(DATA);
-      const pageItems = paged(filtered);
-
-      tbody.innerHTML = '';
-      pageItems.forEach(r=>{
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${r.name}</td><td>${r.category}</td><td>${money(r.price)}</td>`;
-        tbody.appendChild(tr);
-      });
-
-      const tp = totalPages();
-      info.textContent = `Página ${state.page}/${tp}`;
-      prev.disabled = state.page===1;
-      next.disabled = state.page===tp;
-
-      empty.style.display = filtered.length ? 'none' : 'block';
-    }
-
+    const DATA=[{name:'Auriculares',category:'Audio',price:29999},{name:'Teclado',category:'Periféricos',price:45999},{name:'Mouse',category:'Periféricos',price:24999}];
+    const $=s=>document.querySelector(s), tbody=$('#grid tbody'), q=$('#q'),cat=$('#cat'),sort=$('#sort'),pp=$('#pp');
+    const prev=$('#prev'),next=$('#next'),info=$('#info'),empty=$('#empty');
+    const user=JSON.parse(localStorage.getItem('usuario')||'null');if(user)$('#saludo').textContent=`Hola, ${user.nombre}`;
+    let state={page:1,perPage:+pp.value,query:'',category:'',sort:'price-asc'};
+    [...new Set(DATA.map(d=>d.category))].forEach(c=>{let o=document.createElement('option');o.value=c;o.textContent=c;cat.appendChild(o);});
+    q.addEventListener('input',()=>{state.query=q.value.toLowerCase();state.page=1;render();});
+    cat.addEventListener('change',()=>{state.category=cat.value;state.page=1;render();});
+    sort.addEventListener('change',()=>{state.sort=sort.value;render();});
+    pp.addEventListener('change',()=>{state.perPage=+pp.value;state.page=1;render();});
+    prev.addEventListener('click',()=>{if(state.page>1){state.page--;render();}});
+    next.addEventListener('click',()=>{if(state.page<totalPages()){state.page++;render();}});
+    function applyFilters(data){let out=data;if(state.query)out=out.filter(x=>x.name.toLowerCase().includes(state.query));if(state.category)out=out.filter(x=>x.category===state.category);
+      return out.slice().sort((a,b)=>state.sort==='price-asc'?a.price-b.price:b.price-a.price);}
+    function totalPages(){return Math.max(1,Math.ceil(applyFilters(DATA).length/state.perPage));}
+    function paged(d){const s=(state.page-1)*state.perPage;return d.slice(s,s+state.perPage);}
+    function money(n){return n.toLocaleString('es-AR',{style:'currency',currency:'ARS'});}
+    function render(){const f=applyFilters(DATA),items=paged(f);tbody.innerHTML='';items.forEach(r=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${r.name}</td><td>${r.category}</td><td>${money(r.price)}</td>`;tbody.appendChild(tr);});
+      const tp=totalPages();info.textContent=`Página ${state.page}/${tp}`;prev.disabled=state.page===1;next.disabled=state.page===tp;empty.style.display=f.length?'none':'block';}
     render();
   </script>
 </body>
