@@ -4,22 +4,63 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Registro de Usuario</title>
-  
+
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
   <link rel="stylesheet" href="Estilo.css">
 </head>
 <body class="center">
   <main class="card">
+    <!-- Franja superior con logo -->
+    <header class="hero">
+      <img src="logobanner.png" alt="Logo EneBar" class="logo">
+    </header>
+
     <h1>Registro</h1>
-    <p>Completa los datos para regirstrarse</p>
+    <p>Completa los datos para registrarte</p>
 
     <form id="form-registro" novalidate>
       <label for="nombre">Nombre:</label>
-      <input id="nombre" required placeholder="Ej: Ana Pérez" class ="input">
+      <input id="nombre" required placeholder="Ej: Ana Pérez" class="input">
 
-      <label for="email">Email: </label>
-      <input id="email" type="email" required placeholder="ana@email.com">
+      <!-- PROVINCIA -->
+      <label for="provincia">Provincia:</label>
+      <select id="provincia" required class="input">
+        <option value="">Seleccioná tu provincia</option>
+        <option value="Buenos Aires">Buenos Aires</option>
+        <option value="CABA">Ciudad Autónoma de Buenos Aires</option>
+        <option value="Catamarca">Catamarca</option>
+        <option value="Chaco">Chaco</option>
+        <option value="Chubut">Chubut</option>
+        <option value="Córdoba">Córdoba</option>
+        <option value="Corrientes">Corrientes</option>
+        <option value="Entre Ríos">Entre Ríos</option>
+        <option value="Formosa">Formosa</option>
+        <option value="Jujuy">Jujuy</option>
+        <option value="La Pampa">La Pampa</option>
+        <option value="La Rioja">La Rioja</option>
+        <option value="Mendoza">Mendoza</option>
+        <option value="Misiones">Misiones</option>
+        <option value="Neuquén">Neuquén</option>
+        <option value="Río Negro">Río Negro</option>
+        <option value="Salta">Salta</option>
+        <option value="San Juan">San Juan</option>
+        <option value="San Luis">San Luis</option>
+        <option value="Santa Cruz">Santa Cruz</option>
+        <option value="Santa Fe">Santa Fe</option>
+        <option value="Santiago del Estero">Santiago del Estero</option>
+        <option value="Tierra del Fuego">Tierra del Fuego</option>
+        <option value="Tucumán">Tucumán</option>
+      </select>
 
+      <!-- FECHA DE NACIMIENTO -->
+      <label for="fecha">Fecha de nacimiento:</label>
+      <input id="fecha" type="date" required class="input">
+
+      <!-- EMAIL -->
+      <label for="email">Email:</label>
+      <input id="email" type="email" required placeholder="ana@email.com" class="input">
+
+      <!-- CONTRASEÑA -->
       <div class="field">
         <label for="password">Contraseña</label>
         <input id="password" type="password" placeholder="Ingresá tu contraseña" />
@@ -28,14 +69,14 @@
         </button>
       </div>
 
-     <div class="actions">
+      <div class="actions">
         <button class="btn primary" type="submit">Registrarme</button>
         <a href="Login.html">¿Ya tienes usuario?</a>
       </div>
       <div id="msg" class="msg" style="display:none"></div>
     </form>
 
-<!-- POPUP: Éxito -->
+    <!-- POPUP: Éxito -->
     <div id="overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
       <div class="popup">
         <h2 id="popupTitle">✅ Registro exitoso</h2>
@@ -47,7 +88,7 @@
     <!-- POPUP: Campos vacíos -->
     <div id="pop-empty" class="overlay" role="dialog" aria-modal="true" aria-labelledby="emptyTitle">
       <div class="popup">
-        <h2 id="emptyTitle">⚠️Campos vacíos</h2>
+        <h2 id="emptyTitle">⚠️ Campos vacíos</h2>
         <p>Completá <strong>nombre, email y contraseña</strong> para continuar.</p>
         <button class="btn" data-close="pop-empty">Entendido</button>
       </div>
@@ -63,12 +104,28 @@
       </div>
     </div>
 
+    <!-- POPUP: Usuario ya conectado -->
+    <div id="pop-logged" class="overlay" role="dialog" aria-modal="true" aria-labelledby="loggedTitle">
+      <div class="popup">
+        <h2 id="loggedTitle">⚠️ Sesión ya iniciada</h2>
+        <p>El email ingresado ya tiene una sesión activa. Cerrá la sesión existente antes de registrarte nuevamente.</p>
+        <button class="btn" data-close="pop-logged">Entendido</button>
+      </div>
+    </div>
+
+    <!-- POPUP: Email ya registrado -->
+    <div id="pop-duplicate" class="overlay" role="dialog" aria-modal="true" aria-labelledby="dupTitle">
+      <div class="popup">
+        <h2 id="dupTitle">⚠️ Email ya registrado</h2>
+        <p>El correo ingresado ya existe. Iniciá sesión o usá otro email.</p>
+        <button class="btn" data-close="pop-duplicate">Entendido</button>
+      </div>
+    </div>
+
     <footer class="site-footer">
       <div class="footer-wrap">
         <p class="footer-eyebrow">Conoce más sobre</p>
-        
-        <img src="logofooter.png" alt="Logo EneBar" class="footer-logo" >
-
+        <img src="logofooter.png" alt="Logo EneBar" class="footer-logo">
         <ul class="footer-links">
           <li><a href="#">¿Quienes somos?</a></li>
           <li><a href="#">¿Dónde encontrarnos?</a></li>
@@ -76,7 +133,6 @@
           <li><a href="#">Contactanos</a></li>
           <li><a href="#">Nuestras Redes</a></li>
         </ul>
-
         <div class="footer-icons">
           <a href="https://instagram.com" aria-label="Instagram" target="_blank" rel="noopener">
             <i class="bi bi-instagram" style="font-size:1.3rem;"></i>
@@ -93,31 +149,43 @@
   </main>
 
   <script>
+    // Usuarios existentes
+    const USERS = [
+      { email: 'vitolavictoria03@gmail.com', password: 'Vicky012' },
+      { email: 'amorenadelfina15@gmail.com', password: 'Delfi123' },
+      { email: 'luciano.gadea@gmail.com',    password: 'Lucho1234' }
+    ];
+
+    // ====== Utils DOM ======
     const $ = s => document.querySelector(s);
     const nombre = $('#nombre'), email = $('#email'), pass = $('#password'), msg = $('#msg');
     const form = $('#form-registro');
 
-    // Validación de Email
+    // Validaciones
     const reEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-    // Validación de contraseña (1 minúscula, 1 mayúscula, 1 número, mín. 5)
-    const rePwd = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{5,}$/;
+    const rePwd   = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{5,}$/;
 
-    // Mostrar/ocultar contraseña con icono de Bootstrap
-    const toggle = $('#togglePwd');
-    const icon = toggle.querySelector('i');
-    toggle.addEventListener('click', () => {
-      const show = pass.type === 'password';
-      pass.type = show ? 'text' : 'password';
-      icon.classList.toggle('bi-eye', !show);
-      icon.classList.toggle('bi-eye-slash', show);
+    // Mostrar/ocultar contraseña
+    const pwd = document.getElementById('password');
+    const togglePwd = document.getElementById('togglePwd');
+    togglePwd?.addEventListener('click', () => {
+        const isPwd = pwd.type === 'password';
+        pwd.type = isPwd ? 'text' : 'password';
+        togglePwd.innerHTML = isPwd
+          ? '<i class="bi bi-eye" aria-hidden="true"></i>'       // 👁️ ojo abierto al mostrar
+          : '<i class="bi bi-eye-slash" aria-hidden="true"></i>'; // 👁️ tachado al ocultar
     });
 
-    // Helpers popups
+    // Popups
     function openPopup(id){ document.getElementById(id).style.display = 'flex'; }
     function closePopup(id){ document.getElementById(id).style.display = 'none'; }
     document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closePopup(b.getAttribute('data-close'))));
+    ['overlay','pop-empty','pop-missing','pop-logged','pop-duplicate'].forEach(id=>{
+      const el = document.getElementById(id);
+      el.addEventListener('click', e => { if(e.target === el) el.style.display = 'none'; });
+    });
 
-    // Validaciones rápidas
+    // Estados de inputs
     function setState(input, ok){ input.classList.toggle('ok', ok); input.classList.toggle('err', !ok); return ok; }
     const vNombre = () => setState(nombre, nombre.value.trim().length >= 2);
     const vEmail  = () => setState(email,  reEmail.test(email.value.trim()));
@@ -126,49 +194,83 @@
       if(i===nombre) vNombre(); if(i===email) vEmail(); if(i===pass) vPwd();
     }));
 
-    // Submit → popups según el caso
-    const overlay = $('#overlay');      // éxito
-    const closeBtn = $('#closeBtn');    // botón éxito
+    // ====== Gestión de sesiones activas ======
+    function getActiveSessions(){
+      try { return JSON.parse(localStorage.getItem('activeSessions')) || []; }
+      catch { return []; }
+    }
+    function isUserConnected(mail){
+      const sessions = getActiveSessions();
+      return sessions.includes(mail.toLowerCase());
+    }
+
+    // ====== Usuarios registrados (persistidos) ======
+    function getRegisteredUsers(){
+      try { return JSON.parse(localStorage.getItem('registeredUsers')) || []; }
+      catch { return []; }
+    }
+    function setRegisteredUsers(list){
+      localStorage.setItem('registeredUsers', JSON.stringify(list));
+    }
+
+    // Sembrar una vez los USERS base como ya registrados (opcional)
+    if (!localStorage.getItem('seededBaseUsers')) {
+      const base = getRegisteredUsers();
+      const seed = USERS
+        .map(u => ({ nombre: '', email: u.email.toLowerCase() }))
+        .filter(u => !base.some(b => b.email === u.email));
+      if (seed.length) setRegisteredUsers(base.concat(seed));
+      localStorage.setItem('seededBaseUsers', '1');
+    }
+
+    // ====== Submit ======
+    const overlay = $('#overlay');
+    const closeBtn = $('#closeBtn');
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       msg.style.display = 'none';
 
       const n = nombre.value.trim();
-      const m = email.value.trim();
+      const m = email.value.trim().toLowerCase();
       const p = pass.value.trim();
 
-      // 1) Todos vacíos
+      // 1) Vacíos
       if (!n && !m && !p) { openPopup('pop-empty'); return; }
 
-      // 2) Faltantes/incorrectos
+      // 2) Inválidos
       const faltantes = [];
       if (n.length < 2) faltantes.push('• Nombre: mínimo 2 caracteres.');
       if (!reEmail.test(m)) faltantes.push('• Email con formato válido (usuario@dominio).');
       if (!rePwd.test(p))  faltantes.push('• Contraseña: 1 mayúscula, 1 minúscula, 1 número y mínimo 5 caracteres.');
-
       if (faltantes.length > 0) {
         $('#missing-list').innerHTML = faltantes.map(x => `<li>${x}</li>`).join('');
-        openPopup('pop-missing');
-        return;
+        openPopup('pop-missing'); return;
       }
 
-      // 3) Todo OK → guardar y éxito
+      // 3) Email ya registrado (en base hardcode o en localStorage)
+      const existsInBase  = USERS.some(u => u.email.toLowerCase() === m);
+      const existsInLocal = getRegisteredUsers().some(u => u.email === m);
+      if (existsInBase || existsInLocal) { openPopup('pop-duplicate'); return; }
+
+      // 4) Sesión activa
+      if (isUserConnected(m)) { openPopup('pop-logged'); return; }
+
+      // 5) Registrar y persistir
+      const regs = getRegisteredUsers();
+      regs.push({ nombre: n, email: m });
+      setRegisteredUsers(regs);
+
       localStorage.setItem('usuario', JSON.stringify({ nombre: n, email: m }));
+
+      // 6) Éxito
       overlay.style.display = 'flex';
     });
 
-    // Cerrar popup de éxito → continuar
+    // Cerrar popup de éxito → redirigir
     closeBtn.addEventListener('click', () => {
       overlay.style.display = 'none';
-      // Redirige si querés:
       window.location.href = 'productos.html';
-    });
-
-    // Cerrar popups haciendo clic fuera
-    ['overlay','pop-empty','pop-missing'].forEach(id=>{
-      const el = document.getElementById(id);
-      el.addEventListener('click', e => { if(e.target === el) el.style.display = 'none'; });
     });
   </script>
 </body>
