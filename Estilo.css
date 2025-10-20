@@ -11,15 +11,33 @@ body {
   color: #2B1A12; /* texto oscuro legible */
   line-height: 1.5;
 }
+/* ======== FRANJA SUPERIOR CON LOGO ======== */
+.hero {
+  background: #CEB083; /* dorado */
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero .logo {
+  width: 70px;
+  height: 70px;
+}
 
 /* ======== TITULOS Y TEXTOS ======== */
 h1 {
-  color: #2B1A12;
-  margin-bottom: 12px;
-  font-size: 2rem;
+  text-align: center;
+  color: #3C2313;
+  letter-spacing: 0.5px;
+  margin-bottom: 22px;
+  font-size: 1.8rem;
 }
-
 p {
+  text-align: center;
+  color: #3C2313;
+  letter-spacing: 0.5px;
+  
   margin-bottom: 14px;
 }
 
@@ -76,6 +94,18 @@ input:focus, select:focus {
   border: none;
   cursor: pointer;
   color: #7A2F29;
+}
+/* Flecha custom del select */
+select {
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, #3C2313 50%),
+    linear-gradient(135deg, #3C2313 50%, transparent 50%);
+  background-position:
+    calc(100% - 20px) calc(50% - 3px),
+    calc(100% - 13px) calc(50% - 3px);
+  background-size: 8px 8px, 8px 8px;
+  background-repeat: no-repeat;
 }
 
 /* ======== BOTONES ======== */
