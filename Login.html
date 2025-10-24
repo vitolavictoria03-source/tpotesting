@@ -1,4 +1,5 @@
 <!doctype html>
+<html lang="es"><!doctype html>
 <html lang="es">
 <head>
   <meta charset="utf-8" />
@@ -147,3 +148,151 @@
   </script>
 </body>
 </html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Iniciar sesión</title>
+  <link rel="stylesheet" href="Estilo.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+</head>
+<body class="center">
+ <!-- Franja superior con logo -->
+    <header class="hero">
+      <img src="logobanner.png" alt="Logo EneBar" class="logo">
+    </header>
+  <main class="card">
+    <h1>Iniciar sesión</h1>
+    <p>Completa los datos para iniciar sesión</p>
+
+    <!-- NOTA: corregido id del form y se evita envolver el botón en <a> -->
+    <form id="form-iniciar" novalidate>
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" required placeholder="ana@email.com" autocomplete="username" />
+
+      <div class="field">
+        <label for="password">Contraseña</label>
+        <input id="password" name="password" type="password" required placeholder="Ingresá tu contraseña" autocomplete="current-password" />
+        <button type="button" id="togglePwd" aria-label="Mostrar u ocultar contraseña">
+          <i class="bi bi-eye" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div class="actions">
+        <button class="btn primary" type="submit" id="loginBtn">Iniciar sesión</button>
+        <a href="index.html">¿No tienes usuario?</a>
+      </div>
+      <div id="msg" class="msg" hidden></div>
+    </form>
+
+    <footer class="site-footer">
+      <div class="footer-wrap">
+        <p class="footer-eyebrow">Conoce más sobre</p>
+        <img src="logofooter.png" alt="Logo EneBar" class="footer-logo">
+        <ul class="footer-links">
+          <li><a href="#">¿Quiénes somos?</a></li>
+          <li><a href="#">¿Dónde encontrarnos?</a></li>
+          <li><a href="productos.html">Nuestras Barritas</a></li>
+          <li><a href="#">Contáctanos</a></li>
+          <li><a href="#">Nuestras Redes</a></li>
+        </ul>
+        <div class="footer-icons">
+          <a href="https://instagram.com" aria-label="Instagram" target="_blank" rel="noopener"><i class="bi bi-instagram" style="font-size:1.3rem;"></i></a>
+          <a href="https://twitter.com" aria-label="Twitter" target="_blank" rel="noopener"><i class="bi bi-twitter" style="font-size:1.3rem;"></i></a>
+          <a href="mailto:contacto@enebar.com" aria-label="Email"><i class="bi bi-envelope" style="font-size:1.3rem;"></i></a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Popup Éxito -->
+  <div class="overlay" id="okOverlay" role="dialog" aria-modal="true" aria-labelledby="okTitle" aria-hidden="true">
+    <div class="popup">
+      <h2 id="okTitle">¡Bienvenido!</h2>
+      <p>Inicio de sesión exitoso. Serás redirigido a productos.</p>
+      <button class="btn primary" id="okContinue">Continuar</button>
+    </div>
+  </div>
+  </div>
+
+  <!-- Popup Error -->
+  <div class="overlay" id="errorOverlay" role="dialog" aria-modal="true" aria-labelledby="errorTitle" aria-hidden="true">
+    <div class="popup">
+      <h2 id="errorTitle">Usuario no registrado</h2>
+      <p>El email o la contraseña no coinciden con un usuario válido.</p>
+      <div class="actions" style="justify-content:center;gap:10px;">
+        <button class="btn" id="errorClose">Cerrar</button>
+        <a href="index.html" class="btn primary" id="goRegister">Registrarme</a>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <script>
+    // Usuarios registrados
+    const USERS = [
+      { email: 'vitolavictoria03@gmail.com',    password: 'Vicky012' },
+      { email: 'amorenadelfina15@gmail.com',   password: 'Delfi123' },
+      { email: 'luciano.gadea@gmail.com',  password: 'Lucho1234' }
+    ];
+
+    // Helpers modales
+    function showModal(id){ const el=document.getElementById(id); if(!el) return; el.style.display='flex'; el.setAttribute('aria-hidden','false'); }
+    function hideModal(id){ const el=document.getElementById(id); if(!el) return; el.style.display='none'; el.setAttribute('aria-hidden','true'); }
+
+    // Mostrar/ocultar contraseña
+    const pwd = document.getElementById('password');
+    const togglePwd = document.getElementById('togglePwd');
+    togglePwd?.addEventListener('click', () => {
+        const isPwd = pwd.type === 'password';
+        pwd.type = isPwd ? 'text' : 'password';
+        togglePwd.innerHTML = isPwd
+          ? '<i class="bi bi-eye" aria-hidden="true"></i>'       // 👁️ ojo abierto al mostrar
+          : '<i class="bi bi-eye-slash" aria-hidden="true"></i>'; // 👁️ tachado al ocultar
+    });
+
+    // Login
+    const form = document.getElementById('form-iniciar');
+    const msg = document.getElementById('msg');
+
+    form?.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      msg.hidden = true;
+
+      const email = (document.getElementById('email').value || '').trim().toLowerCase();
+      const password = document.getElementById('password').value || '';
+
+      if(!email || !password){
+        msg.textContent = 'Completa email y contraseña.';
+        msg.hidden = false;
+        return;
+      }
+
+      const found = USERS.find(u => u.email.toLowerCase() === email && u.password === password);
+
+      if(found){
+        // Éxito: mostrar popup y redirigir
+        showModal('okOverlay');
+        document.getElementById('okContinue').addEventListener('click', () => {
+        window.location.href = 'productos.html';
+        }, { once: true });
+      } else {
+        // Error: usuario no registrado
+        showModal('errorOverlay');
+        document.getElementById('errorClose').focus();
+      }
+    });
+
+    // Cerrar modal de error
+    document.getElementById('errorClose')?.addEventListener('click', ()=> hideModal('errorOverlay'));
+
+    // Cerrar modales con Escape
+    document.addEventListener('keydown', (ev)=>{
+      if(ev.key === 'Escape'){
+        hideModal('errorOverlay');
+        hideModal('okOverlay');
+      }
+    });
+  </script>
+</body>
+</html>
+
