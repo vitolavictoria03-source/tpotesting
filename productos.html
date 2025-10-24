@@ -73,25 +73,26 @@
     </div>
   
     <!-- Popup carrito -->
-   <div id="cart-overlay" class="cart-overlay" hidden>
-    <div class="cart-popup" role="dialog" aria-modal="true" aria-labelledby="cp-title">
-      <button class="cp-close" id="cp-close" aria-label="Cerrar">×</button>
-      <div class="cp-row">
-        <img id="cp-img" class="cp-img" alt="">
-        <div class="cp-info">
-          <p id="cp-title" class="cp-title">Producto</p>
-          <p class="cp-line"><span id="cp-qty">1</span> × <span id="cp-price">$0</span></p>
-          <p class="cp-added">¡Agregado al carrito!</p>
+    <div id="cart-overlay" class="cart-overlay" hidden>
+      <div class="cart-popup" role="dialog" aria-modal="true" aria-labelledby="cp-title">
+        <button class="cp-close" id="cp-close" aria-label="Cerrar">×</button>
+        <div class="cp-row">
+          <img id="cp-img" class="cp-img" alt="">
+          <div class="cp-info">
+            <p id="cp-title" class="cp-title">Producto</p>
+            <p class="cp-line"><span id="cp-qty">1</span> × <span id="cp-price">$0</span></p>
+            <p class="cp-added">¡Agregado al carrito!</p>
+          </div>
+        </div>
+        <hr class="cp-sep">
+        <div class="cp-total"><span>Total:</span><strong id="cp-total">$0</strong></div>
+        <div class="cp-actions">
+          <button id="cp-continue" class="cp-btn light">Seguir comprando</button>
+          <a id="cp-view" class="cp-btn" href="carrito.html">Ver carrito</a>
         </div>
       </div>
-      <hr class="cp-sep">
-      <div class="cp-total"><span>Total:</span><strong id="cp-total">$0</strong></div>
-      <div class="cp-actions">
-        <button id="cp-continue" class="cp-btn light">Seguir comprando</button>
-        <a id="cp-view" class="cp-btn" href="carrito.html">Ver carrito</a>
-      </div>
     </div>
-  </div>
+
   </main>
 
   <!-- FOOTER -->
@@ -123,200 +124,225 @@
   </footer>
 
  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // ================== DATA ==================
-      const DATA = [
-        {id:1, name:'Power Choco 20', flavor:'Chocolate', protein:20, price:1999, unitWeight:45, units:3, kcal:190, pricePerUnit:666, rating:4.6, stock:12, vegan:false, glutenFree:true,  img:'img/b1.jpg'},
-        {id:2, name:'Vegan Crunch',  flavor:'Almendra',  protein:12, price:2199, unitWeight:40, units:3, kcal:170, pricePerUnit:733, rating:4.2, stock:8,  vegan:true,  glutenFree:true,  img:'img/b2.jpg'},
-        {id:3, name:'Eco Nuts',       flavor:'Maní y miel', protein:9,  price:1399, unitWeight:35, units:3, kcal:160, pricePerUnit:466, rating:4.0, stock:22, vegan:false, glutenFree:false, img:'img/b3.jpg'},
-        {id:4, name:'Fiber Max 15',   flavor:'Arándanos', protein:15, price:1799, unitWeight:42, units:3, kcal:180, pricePerUnit:599, rating:4.5, stock:5,  vegan:false, glutenFree:true,  img:'img/b4.jpg'},
-        {id:5, name:'Plant Power 22', flavor:'Cookies & Cream', protein:22, price:2499, unitWeight:50, units:3, kcal:210, pricePerUnit:833, rating:4.8, stock:14, vegan:true, glutenFree:true, img:'img/b5.jpg'},
-        {id:6, name:'Kids Honey 7',   flavor:'Miel',      protein:7,  price:999,  unitWeight:25, units:3, kcal:120, pricePerUnit:333, rating:3.9, stock:30, vegan:false, glutenFree:false, img:'img/b6.jpg'},
-        {id:7, name:'Sin TACC Plus',  flavor:'Dátiles y nuez', protein:13, price:2099, unitWeight:40, units:3, kcal:175, pricePerUnit:699, rating:4.4, stock:9, vegan:true,  glutenFree:true,  img:'img/b7.jpg'},
-        {id:8, name:'Choco Fit 18',   flavor:'Chocolate negro', protein:18, price:1899, unitWeight:42, units:3, kcal:185, pricePerUnit:633, rating:4.3, stock:0, vegan:false, glutenFree:true,  img:'img/b8.jpg'},
-        {id:9, name:'Coco Banana 14', flavor:'Banana y coco', protein:14, price:1599, unitWeight:38, units:3, kcal:165, pricePerUnit:533, rating:4.1, stock:18, vegan:false, glutenFree:true, img:'img/b9.jpg'}
-      ];
 
-      // ================== HELPERS / REFS ==================
-      const $  = s => document.querySelector(s);
-      const money = n => n.toLocaleString('es-AR',{style:'currency',currency:'ARS'});
+  document.addEventListener('DOMContentLoaded', () => {
+    // ================== DATA ==================
+    const DATA = [
+      {id:1, name:'Power Choco 20', flavor:'Chocolate', protein:20, price:1999, unitWeight:45, units:3, kcal:190, pricePerUnit:666, rating:4.6, stock:12, vegan:false, glutenFree:true,  img:'img/b1.jpg'},
+      {id:2, name:'Vegan Crunch',  flavor:'Almendra',  protein:12, price:2199, unitWeight:40, units:3, kcal:170, pricePerUnit:733, rating:4.2, stock:8,  vegan:true,  glutenFree:true,  img:'img/b2.jpg'},
+      {id:3, name:'Eco Nuts',       flavor:'Maní y miel', protein:9,  price:1399, unitWeight:35, units:3, kcal:160, pricePerUnit:466, rating:4.0, stock:22, vegan:false, glutenFree:false, img:'img/b3.jpg'},
+      {id:4, name:'Fiber Max 15',   flavor:'Arándanos', protein:15, price:1799, unitWeight:42, units:3, kcal:180, pricePerUnit:599, rating:4.5, stock:5,  vegan:false, glutenFree:true,  img:'img/b4.jpg'},
+      {id:5, name:'Plant Power 22', flavor:'Cookies & Cream', protein:22, price:2499, unitWeight:50, units:3, kcal:210, pricePerUnit:833, rating:4.8, stock:14, vegan:true, glutenFree:true, img:'img/b5.jpg'},
+      {id:6, name:'Kids Honey 7',   flavor:'Miel',      protein:7,  price:999,  unitWeight:25, units:3, kcal:120, pricePerUnit:333, rating:3.9, stock:30, vegan:false, glutenFree:false, img:'img/b6.jpg'},
+      {id:7, name:'Sin TACC Plus',  flavor:'Dátiles y nuez', protein:13, price:2099, unitWeight:40, units:3, kcal:175, pricePerUnit:699, rating:4.4, stock:9, vegan:true,  glutenFree:true,  img:'img/b7.jpg'},
+      {id:8, name:'Choco Fit 18',   flavor:'Chocolate negro', protein:18, price:1899, unitWeight:42, units:3, kcal:185, pricePerUnit:633, rating:4.3, stock:0, vegan:false, glutenFree:true,  img:'img/b8.jpg'},
+      {id:9, name:'Coco Banana 14', flavor:'Banana y coco', protein:14, price:1599, unitWeight:38, units:3, kcal:165, pricePerUnit:533, rating:4.1, stock:18, vegan:false, glutenFree:true, img:'img/b9.jpg'}
+    ];
 
-      // Filtros / UI
-      const q=$('#q'), sort=$('#sort'), protein=$('#protein'), min=$('#min'), max=$('#max');
-      const vegan=$('#vegan'), gf=$('#gf'), clear=$('#clear'), chips=$('#active-chips');
-      const catalog=$('#catalog'), count=$('#count'), empty=$('#empty');
+    // ================== HELPERS / REFS ==================
+    const $  = s => document.querySelector(s);
+    const money = n => n.toLocaleString('es-AR',{style:'currency',currency:'ARS'});
 
-      // Popup carrito (asegúrate de tener su HTML en la página)
-      const overlay = document.getElementById('cart-overlay');
-      const cpImg   = document.getElementById('cp-img');
-      const cpTitle = document.getElementById('cp-title');
-      const cpQty   = document.getElementById('cp-qty');
-      const cpPrice = document.getElementById('cp-price');
-      const cpTotal = document.getElementById('cp-total');
-      const cpClose = document.getElementById('cp-close');
-      const cpContinue = document.getElementById('cp-continue');
+    // Filtros / UI
+    const q=$('#q'), sort=$('#sort'), protein=$('#protein'), min=$('#min'), max=$('#max');
+    const vegan=$('#vegan'), gf=$('#gf'), clear=$('#clear'), chips=$('#active-chips');
+    const catalog=$('#catalog'), count=$('#count'), empty=$('#empty');
 
-      // Estado de filtros
-      let state = {query:'', sort:'price-asc', protein:'', min:null, max:null, vegan:false, gf:false};
+    // Popup carrito
+    const overlay = document.getElementById('cart-overlay');
+    const cpImg   = document.getElementById('cp-img');
+    const cpTitle = document.getElementById('cp-title');
+    const cpQty   = document.getElementById('cp-qty');
+    const cpPrice = document.getElementById('cp-price');
+    const cpTotal = document.getElementById('cp-total');
+    const cpClose = document.getElementById('cp-close');
+    const cpContinue = document.getElementById('cp-continue');
 
-      // ================== CART (localStorage) ==================
-      const CART_KEY = 'enebar_cart';
-      const getCart = () => { try{ return JSON.parse(localStorage.getItem(CART_KEY))||[] } catch { return []; } };
-      const setCart = c => localStorage.setItem(CART_KEY, JSON.stringify(c));
-      function addToCart(prod, qty=1){
-        const cart = getCart();
-        const i = cart.findIndex(p => p.id === prod.id);
-        if(i>-1){ cart[i].qty = (cart[i].qty||1) + qty; }
-        else { cart.push({ id: prod.id, name: prod.name, price: prod.price, img: prod.img, flavor: prod.flavor, qty }); }
-        setCart(cart);
-      }
+    // Estado de filtros
+    let state = {query:'', sort:'price-asc', protein:'', min:null, max:null, vegan:false, gf:false};
 
-      // ================== LISTENERS ==================
-      q.addEventListener('input', () => { state.query = q.value.trim().toLowerCase(); render(); });
-      sort.addEventListener('change', () => { state.sort = sort.value; render(); });
-      protein.addEventListener('change', () => { state.protein = protein.value; render(); });
+    // ================== CART (localStorage) ==================
+    const CART_KEY = 'enebar_cart';
+    const getCart = () => { try{ return JSON.parse(localStorage.getItem(CART_KEY))||[] } catch { return []; } };
+    const setCart = c => localStorage.setItem(CART_KEY, JSON.stringify(c));
+    function addToCart(prod, qty=1){
+      const cart = getCart();
+      const i = cart.findIndex(p => p.id === prod.id);
+      if(i>-1){ cart[i].qty = (cart[i].qty||1) + qty; }
+      else { cart.push({ id: prod.id, name: prod.name, price: prod.price, img: prod.img, flavor: prod.flavor, qty }); }
+      setCart(cart);
+    }
 
-      const syncPrice = () => {
-        const minVal = Number(min.value);
-        const maxVal = Number(max.value);
-        state.min = Number.isFinite(minVal) && min.value!=='' ? minVal : null;
-        state.max = Number.isFinite(maxVal) && max.value!=='' ? maxVal : null;
-        render();
-      };
-      min.addEventListener('input', syncPrice);
-      max.addEventListener('input', syncPrice);
-      vegan.addEventListener('change', () => { state.vegan = vegan.checked; render(); });
-      gf.addEventListener('change', () => { state.gf = gf.checked; render(); });
+    // ================== LISTENERS ==================
+    if(q) q.addEventListener('input', () => { state.query = q.value.trim().toLowerCase(); render(); });
+    if(sort) sort.addEventListener('change', () => { state.sort = sort.value; render(); });
+    if(protein) protein.addEventListener('change', () => { state.protein = protein.value; render(); });
 
-      clear.addEventListener('click', () => {
-        state = {query:'', sort:'price-asc', protein:'', min:null, max:null, vegan:false, gf:false};
-        q.value=''; sort.value='price-asc'; protein.value='';
-        min.value=''; max.value=''; vegan.checked=false; gf.checked=false;
-        render();
-      });
+    const syncPrice = () => {
+      const minVal = Number(min?.value);
+      const maxVal = Number(max?.value);
+      state.min = Number.isFinite(minVal) && min && min.value!=='' ? minVal : null;
+      state.max = Number.isFinite(maxVal) && max && max.value!=='' ? maxVal : null;
+      render();
+    };
+    if(min){ min.addEventListener('input', syncPrice); }
+    if(max){ max.addEventListener('input', syncPrice); }
+    if(vegan) vegan.addEventListener('change', () => { state.vegan = vegan.checked; render(); });
+    if(gf) gf.addEventListener('change', () => { state.gf = gf.checked; render(); });
 
-      // ================== POPUP ==================
-      function showCartPopup(item, qty=1){
-        if(!overlay) return; // por si no está el HTML del popup
-        cpImg.src = item.img || 'https://placehold.co/100x100?text=Barrita';
-        cpImg.alt = 'Barrita ' + item.name;
-        cpTitle.textContent = item.name;
-        cpQty.textContent   = qty;
-        cpPrice.textContent = money(item.price);
-        cpTotal.textContent = money(item.price * qty);
-
-        overlay.hidden = false;
-        const close = () => { overlay.hidden = true; document.removeEventListener('keydown', esc); };
-        const esc = e => { if(e.key === 'Escape') close(); };
-        cpClose.onclick = close;
-        cpContinue.onclick = close;
-        document.addEventListener('keydown', esc);
-        overlay.addEventListener('click', (e)=>{ if(e.target === overlay) close(); });
-      }
-
-      // ================== FILTROS ==================
-      function applyFilters(data){
-        return data
-          .filter(x => {
-            if (state.query && !(`${x.name} ${x.flavor}`.toLowerCase().includes(state.query))) return false;
-            if (state.protein==='20+'   && !(x.protein>=20)) return false;
-            if (state.protein==='10-19' && !(x.protein>=10 && x.protein<=19)) return false;
-            if (state.protein==='<10'   && !(x.protein<10)) return false;
-            if (state.vegan && !x.vegan) return false;
-            if (state.gf && !x.glutenFree) return false;
-            if (state.min!=null && x.price < state.min) return false;
-            if (state.max!=null && x.price > state.max) return false;
-            return true;
-          })
-          .sort((a,b) => {
-            switch(state.sort){
-              case 'price-asc':    return a.price - b.price;
-              case 'price-desc':   return b.price - a.price;
-              case 'protein-desc': return b.protein - a.protein;
-              case 'protein-asc':  return a.protein - b.protein;
-              default: return 0;
-            }
-          });
-      }
-
-      function renderChips(){
-        const arr = [];
-        if(state.query)   arr.push(`Búsqueda: "${state.query}"`);
-        if(state.protein) arr.push(`Proteína: ${state.protein}`);
-        if(state.min!=null) arr.push(`Min: ${money(state.min)}`);
-        if(state.max!=null) arr.push(`Max: ${money(state.max)}`);
-        if(state.vegan)   arr.push('Vegano');
-        if(state.gf)      arr.push('Sin TACC');
-        if(chips) chips.innerHTML = arr.length ? arr.map(t=>`<span class="chip">${t}</span>`).join('') : '<span class="chip">Sin filtros</span>';
-      }
-
-      // Enlaza los botones "Agregar" al carrito + popup
-      function attachAddHandlers(items){
-        document.querySelectorAll('.btn-add').forEach((btn, i) => {
-          const item = items[i];
-          if(btn.disabled) return;
-          btn.onclick = () => {
-            addToCart(item, 1);
-            showCartPopup(item, 1);
-          };
-        });
-      }
-
-      // ================== RENDER ==================
-      function starsFrom(r){
-        const full = Math.round(r*2)/2, on = Math.floor(full), half = full - on >= 0.5;
-        return '★★★★★'.slice(0,on) + (half?'★':'') + '<span class="off">' + '★★★★★'.slice(0,5-on-(half?1:0)) + '</span>';
-      }
-
-      function render(){
-        const items = applyFilters(DATA);
-        renderChips();
-        count.textContent = `${items.length} producto${items.length!==1?'s':''}`;
-
-        catalog.innerHTML = items.map(x=>`
-          <article class="product-card">
-            <div class="media">
-              <img src="${x.img || 'https://placehold.co/800x800?text=Barrita'}" alt="Barrita ${x.name}">
-            </div>
-            <div class="body">
-              <div>
-                ${x.glutenFree ? '<span class="badge">Sin TACC</span>' : ''}
-                ${x.vegan ? '<span class="badge">Vegano</span>' : ''}
-              </div>
-              <h3 class="title">${x.name}</h3>
-              <ul class="specs">
-                <li><strong>Sabor:</strong> ${x.flavor}</li>
-                <li><strong>Proteína:</strong> ${x.protein} g por barra</li>
-                <li><strong>Pack:</strong> ${x.units} unidades · ${x.unitWeight} g c/u</li>
-                <li><strong>Calorías:</strong> ${x.kcal} kcal c/u</li>
-              </ul>
-              <div class="rating">
-                <span class="stars">${starsFrom(x.rating)}</span>
-                <span>${x.rating.toFixed(1)}</span>
-              </div>
-            </div>
-            <div class="footer">
-              <div class="price-row">
-                <div class="price">${money(x.price)}</div>
-                <div class="unit">(${money(x.pricePerUnit)}/u)</div>
-              </div>
-              ${
-                x.stock>0
-                  ? `<button class="btn-add"><i class="bi bi-cart-plus"></i> Agregar</button>`
-                  : `<button class="btn-add" disabled style="opacity:.6;cursor:not-allowed"><i class="bi bi-x-circle"></i> Sin stock</button>`
-              }
-            </div>
-          </article>
-        `).join('');
-
-        empty.style.display = items.length ? 'none' : 'block';
-        attachAddHandlers(items);
-      }
-
+    if(clear) clear.addEventListener('click', () => {
+      state = {query:'', sort:'price-asc', protein:'', min:null, max:null, vegan:false, gf:false};
+      if(q) q.value='';
+      if(sort) sort.value='price-asc';
+      if(protein) protein.value='';
+      if(min) min.value='';
+      if(max) max.value='';
+      if(vegan) vegan.checked=false;
+      if(gf) gf.checked=false;
       render();
     });
-</script>
 
+    // ================== POPUP ==================
+    function showCartPopup(item, qty=1){
+      if(!overlay) return;
+      cpImg.src = item.img || 'https://placehold.co/100x100?text=Barrita';
+      cpImg.alt = 'Barrita ' + item.name;
+      cpTitle.textContent = item.name;
+      cpQty.textContent   = qty;
+      cpPrice.textContent = money(item.price);
+      cpTotal.textContent = money(item.price * qty);
+
+      overlay.hidden = false;
+      document.body.classList.add('modal-open'); // bloquea scroll
+
+      const close = () => {
+        overlay.hidden = true;
+        document.body.classList.remove('modal-open');
+        document.removeEventListener('keydown', esc);
+      };
+      const esc = e => { if(e.key === 'Escape') close(); };
+
+      if(cpClose) cpClose.onclick = close;
+      if(cpContinue) cpContinue.onclick = close;
+      document.addEventListener('keydown', esc);
+      overlay.addEventListener('click', (e)=>{ if(e.target === overlay) close(); });
+    }
+
+    // ================== FILTROS ==================
+    function applyFilters(data){
+      return data
+        .filter(x => {
+          if (state.query && !(`${x.name} ${x.flavor}`.toLowerCase().includes(state.query))) return false;
+          if (state.protein==='20+'   && !(x.protein>=20)) return false;
+          if (state.protein==='10-19' && !(x.protein>=10 && x.protein<=19)) return false;
+          if (state.protein==='<10'   && !(x.protein<10)) return false;
+          if (state.vegan && !x.vegan) return false;
+          if (state.gf && !x.glutenFree) return false;
+          if (state.min!=null && x.price < state.min) return false;
+          if (state.max!=null && x.price > state.max) return false;
+          return true;
+        })
+        .sort((a,b) => {
+          switch(state.sort){
+            case 'price-asc':    return a.price - b.price;
+            case 'price-desc':   return b.price - a.price;
+            case 'protein-desc': return b.protein - a.protein;
+            case 'protein-asc':  return a.protein - b.protein;
+            default: return 0;
+          }
+        });
+    }
+
+    // Filtros activos (para fallback defensivo)
+    const hasActiveFilters = () =>
+      (state.query && state.query.length) ||
+      state.protein ||
+      state.vegan || state.gf ||
+      state.min != null || state.max != null;
+
+    function renderChips(){
+      if(!chips) return;
+      const arr = [];
+      if(state.query)   arr.push(`Búsqueda: "${state.query}"`);
+      if(state.protein) arr.push(`Proteína: ${state.protein}`);
+      if(state.min!=null) arr.push(`Min: ${money(state.min)}`);
+      if(state.max!=null) arr.push(`Max: ${money(state.max)}`);
+      if(state.vegan)   arr.push('Vegano');
+      if(state.gf)      arr.push('Sin TACC');
+      chips.innerHTML = arr.length ? arr.map(t=>`<span class="chip">${t}</span>`).join('') : '<span class="chip">Sin filtros</span>';
+    }
+
+    // Enlaza los botones "Agregar" al carrito + popup
+    function attachAddHandlers(items){
+      document.querySelectorAll('.btn-add').forEach((btn, i) => {
+        const item = items[i];
+        if(!btn || !item || btn.disabled) return;
+        btn.onclick = () => {
+          addToCart(item, 1);
+          showCartPopup(item, 1);
+        };
+      });
+    }
+
+    // ================== RENDER ==================
+    function starsFrom(r){
+      const full = Math.round(r*2)/2, on = Math.floor(full), half = full - on >= 0.5;
+      return '★★★★★'.slice(0,on) + (half?'★':'') + '<span class="off">' + '★★★★★'.slice(0,5-on-(half?1:0)) + '</span>';
+    }
+
+    function render(){
+      let items = applyFilters(DATA);
+
+      // Fallback: si no hay filtros activos y quedó vacío, muestro todo.
+      if (!hasActiveFilters() && items.length === 0) {
+        items = DATA.slice();
+      }
+
+      renderChips();
+      if(count) count.textContent = `${items.length} producto${items.length!==1?'s':''}`;
+
+      catalog.innerHTML = items.map(x=>`
+        <article class="product-card">
+          <div class="media">
+            <img src="${x.img || 'https://placehold.co/800x800?text=Barrita'}" alt="Barrita ${x.name}">
+          </div>
+          <div class="body">
+            <div>
+              ${x.glutenFree ? '<span class="badge">Sin TACC</span>' : ''}
+              ${x.vegan ? '<span class="badge">Vegano</span>' : ''}
+            </div>
+            <h3 class="title">${x.name}</h3>
+            <ul class="specs">
+              <li><strong>Sabor:</strong> ${x.flavor}</li>
+              <li><strong>Proteína:</strong> ${x.protein} g por barra</li>
+              <li><strong>Pack:</strong> ${x.units} unidades · ${x.unitWeight} g c/u</li>
+              <li><strong>Calorías:</strong> ${x.kcal} kcal c/u</li>
+            </ul>
+            <div class="rating">
+              <span class="stars">${starsFrom(x.rating)}</span>
+              <span>${x.rating.toFixed(1)}</span>
+            </div>
+          </div>
+          <div class="footer">
+            <div class="price-row">
+              <div class="price">${money(x.price)}</div>
+              <div class="unit">(${money(x.pricePerUnit)}/u)</div>
+            </div>
+            ${
+              x.stock>0
+                ? `<button class="btn-add"><i class="bi bi-cart-plus"></i> Agregar</button>`
+                : `<button class="btn-add" disabled style="opacity:.6;cursor:not-allowed"><i class="bi bi-x-circle"></i> Sin stock</button>`
+            }
+          </div>
+        </article>
+      `).join('');
+
+      if(empty) empty.style.display = items.length ? 'none' : 'block';
+      attachAddHandlers(items);
+    }
+
+    render();
+  });
+</script>
 </body>
 </html>
-
