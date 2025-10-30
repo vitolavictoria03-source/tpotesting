@@ -7,15 +7,13 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
   <link rel="stylesheet" href="Estilo.css">
 </head>
+
 <body>
-  <!-- Franja superior con logo -->
   <header class="hero">
-    <img src="logobanner.png" alt="Logo EneBar" class="logo">
+    <a href="index.html"><img src="logobanner.png" alt="Logo EneBar" class="logo"></a>
   </header>
 
-  <!-- CONTENIDO PRINCIPAL -->
   <main class="catalog">
-    <!-- TOOLBAR -->
     <div class="toolbar">
       <div class="search">
         <input id="q" class="search-input" type="search" placeholder="Buscar barritas por nombre o sabor…">
@@ -30,12 +28,9 @@
       </div>
     </div>
 
-    <!-- LAYOUT: filtros + productos -->
     <div class="catalog-layout">
-      <!-- SIDEBAR -->
       <aside class="filters">
         <h3>Filtros</h3>
-
         <div class="field">
           <label for="protein">Cantidad de proteína: <small>(por barra)</small></label>
           <select id="protein">
@@ -45,7 +40,6 @@
             <option value="<10">Menos de 10g</option>
           </select>
         </div>
-
         <div class="field">
           <label><strong>Precio</strong></label>
           <div class="range">
@@ -53,25 +47,18 @@
             <input id="max" type="number" placeholder="Máx.">
           </div>
         </div>
-
         <div class="field check"><input id="vegan" type="checkbox"> <label for="vegan">Vegano</label></div>
         <div class="field check"><input id="gf" type="checkbox"> <label for="gf">Apto celíacos (Sin TACC)</label></div>
-
         <button id="clear" class="btn btn-clear">Limpiar filtros</button>
-        <div id="active-chips"></div>
       </aside>
 
-      <!-- CATÁLOGO -->
       <section>
         <div id="count" class="products-count"></div>
         <div id="catalog" class="products"></div>
-
-        <div id="empty" class="empty" style="display:none">
-          No se encontraron resultados con los filtros aplicados.
-        </div>
+        <div id="empty" class="empty" style="display:none">No se encontraron resultados con los filtros aplicados.</div>
       </section>
     </div>
-  
+
     <!-- Popup carrito -->
     <div id="cart-overlay" class="cart-overlay" hidden>
       <div class="cart-popup" role="dialog" aria-modal="true" aria-labelledby="cp-title">
@@ -92,15 +79,12 @@
         </div>
       </div>
     </div>
-
   </main>
 
-  <!-- FOOTER -->
   <footer class="site-footer">
     <div class="footer-wrap">
       <p class="footer-eyebrow">Conoce más sobre</p>
       <img src="logofooter.png" alt="Logo EneBar" class="footer-logo">
-
       <ul class="footer-links">
         <li><a href="#">¿Quiénes somos?</a></li>
         <li><a href="#">¿Dónde encontrarnos?</a></li>
@@ -108,35 +92,26 @@
         <li><a href="#">Contáctanos</a></li>
         <li><a href="#">Nuestras Redes</a></li>
       </ul>
-
       <div class="footer-icons">
-        <a href="https://instagram.com" aria-label="Instagram" target="_blank" rel="noopener">
-          <i class="bi bi-instagram" style="font-size:1.3rem;"></i>
-        </a>
-        <a href="https://twitter.com" aria-label="Twitter" target="_blank" rel="noopener">
-          <i class="bi bi-twitter" style="font-size:1.3rem;"></i>
-        </a>
-        <a href="mailto:contacto@enebar.com" aria-label="Email">
-          <i class="bi bi-envelope" style="font-size:1.3rem;"></i>
-        </a>
+        <a href="https://instagram.com" aria-label="Instagram" target="_blank" rel="noopener"><i class="bi bi-instagram" style="font-size:1.3rem;"></i></a>
+        <a href="https://twitter.com" aria-label="Twitter" target="_blank" rel="noopener"><i class="bi bi-twitter" style="font-size:1.3rem;"></i></a>
+        <a href="mailto:contacto@enebar.com" aria-label="Email"><i class="bi bi-envelope" style="font-size:1.3rem;"></i></a>
       </div>
     </div>
   </footer>
-
- <script>
-
-  document.addEventListener('DOMContentLoaded', () => {
-    // ================== DATA ==================
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+  // ================== DATA ==================
     const DATA = [
-      {id:1, name:'Power Choco 20', flavor:'Chocolate', protein:20, price:1999, unitWeight:45, units:3, kcal:190, pricePerUnit:666, rating:4.6, stock:12, vegan:false, glutenFree:true,  img:'img/b1.jpg'},
-      {id:2, name:'Vegan Crunch',  flavor:'Almendra',  protein:12, price:2199, unitWeight:40, units:3, kcal:170, pricePerUnit:733, rating:4.2, stock:8,  vegan:true,  glutenFree:true,  img:'img/b2.jpg'},
-      {id:3, name:'Eco Nuts',       flavor:'Maní y miel', protein:9,  price:1399, unitWeight:35, units:3, kcal:160, pricePerUnit:466, rating:4.0, stock:22, vegan:false, glutenFree:false, img:'img/b3.jpg'},
-      {id:4, name:'Fiber Max 15',   flavor:'Arándanos', protein:15, price:1799, unitWeight:42, units:3, kcal:180, pricePerUnit:599, rating:4.5, stock:5,  vegan:false, glutenFree:true,  img:'img/b4.jpg'},
-      {id:5, name:'Plant Power 22', flavor:'Cookies & Cream', protein:22, price:2499, unitWeight:50, units:3, kcal:210, pricePerUnit:833, rating:4.8, stock:14, vegan:true, glutenFree:true, img:'img/b5.jpg'},
-      {id:6, name:'Kids Honey 7',   flavor:'Miel',      protein:7,  price:999,  unitWeight:25, units:3, kcal:120, pricePerUnit:333, rating:3.9, stock:30, vegan:false, glutenFree:false, img:'img/b6.jpg'},
-      {id:7, name:'Sin TACC Plus',  flavor:'Dátiles y nuez', protein:13, price:2099, unitWeight:40, units:3, kcal:175, pricePerUnit:699, rating:4.4, stock:9, vegan:true,  glutenFree:true,  img:'img/b7.jpg'},
-      {id:8, name:'Choco Fit 18',   flavor:'Chocolate negro', protein:18, price:1899, unitWeight:42, units:3, kcal:185, pricePerUnit:633, rating:4.3, stock:0, vegan:false, glutenFree:true,  img:'img/b8.jpg'},
-      {id:9, name:'Coco Banana 14', flavor:'Banana y coco', protein:14, price:1599, unitWeight:38, units:3, kcal:165, pricePerUnit:533, rating:4.1, stock:18, vegan:false, glutenFree:true, img:'img/b9.jpg'}
+      { id:1, name:'Power Almond Choco', flavor:'Chocolate, avena y almendras', ingredients:'Avena integral, almendras, chips de chocolate amargo, miel natural.', protein:18, price:1999, unitWeight:45, units:3, kcal:190, pricePerUnit:666, rating:4.6, stock:12, vegan:false, glutenFree:true, img:'img/almendraavenachips.png' },
+    { id:2, name:'White Crunch', flavor:'Chocolate blanco y almendra', ingredients:'Avena, almendras tostadas, chocolate blanco, semillas de chía y maní.', protein:15, price:2199, unitWeight:40, units:3, kcal:185, pricePerUnit:733, rating:4.4, stock:10, vegan:false, glutenFree:true, img:'img/almendrachoblancoavena.png' },
+    { id:3, name:'Tropical Energy', flavor:'Banana y pasas', ingredients:'Avena, pasas rubias, banana deshidratada, almendras y miel.', protein:12, price:1699, unitWeight:38, units:3, kcal:170, pricePerUnit:566, rating:4.3, stock:16, vegan:false, glutenFree:true, img:'img/almendrapasabanan.png' },
+    { id:4, name:'Vital Mix', flavor:'Semillas y pasas', ingredients:'Semillas de girasol, almendras, pasas negras, avena y miel orgánica.', protein:14, price:1799, unitWeight:40, units:3, kcal:175, pricePerUnit:599, rating:4.5, stock:8, vegan:true, glutenFree:true, img:'img/almendrapasassemilla.png' },
+    { id:5, name:'Green Pistachio Boost', flavor:'Pistacho y pasas', ingredients:'Pistachos, pasas negras, avena inflada y miel natural.', protein:20, price:2499, unitWeight:42, units:3, kcal:210, pricePerUnit:833, rating:4.8, stock:14, vegan:false, glutenFree:false, img:'img/apasaspistacho.png' },
+    { id:6, name:'Nut Fusion', flavor:'Avellanas, cajú y pasas', ingredients:'Avellanas, castañas de cajú, pasas rubias, avena y jarabe de arroz.', protein:11, price:1899, unitWeight:40, units:3, kcal:180, pricePerUnit:633, rating:4.1, stock:20, vegan:false, glutenFree:false, img:'img/avellanacajualmendrapasa.png' },
+    { id:7, name:'Dark Choco Raisin', flavor:'Chocolate negro y pasas', ingredients:'Avena, chips de cacao 70%, pasas negras, miel y aceite de coco.', protein:13, price:1899, unitWeight:40, units:3, kcal:185, pricePerUnit:633, rating:4.2, stock:15, vegan:false, glutenFree:true, img:'img/avenachocolatepasas.png' },
+    { id:8, name:'Apple Crunch', flavor:'Avena y manzana', ingredients:'Avena, trozos de manzana deshidratada, miel, canela y chía.', protein:10, price:1599, unitWeight:38, units:3, kcal:165, pricePerUnit:533, rating:4.1, stock:18, vegan:true, glutenFree:true, img:'img/avenamanzana.png' },
+    { id:9, name:'Coconut Trail', flavor:'Pasas y coco rallado', ingredients:'Avena inflada, pasas negras, coco rallado, almendras y miel.', protein:11, price:1699, unitWeight:38, units:3, kcal:170, pricePerUnit:566, rating:4.3, stock:17, vegan:true, glutenFree:true, img:'img/avenapasas.png' }
     ];
 
     // ================== HELPERS / REFS ==================
@@ -149,14 +124,14 @@
     const catalog=$('#catalog'), count=$('#count'), empty=$('#empty');
 
     // Popup carrito
-    const overlay = document.getElementById('cart-overlay');
-    const cpImg   = document.getElementById('cp-img');
-    const cpTitle = document.getElementById('cp-title');
-    const cpQty   = document.getElementById('cp-qty');
-    const cpPrice = document.getElementById('cp-price');
-    const cpTotal = document.getElementById('cp-total');
-    const cpClose = document.getElementById('cp-close');
-    const cpContinue = document.getElementById('cp-continue');
+    const overlay = $('#cart-overlay');
+    const cpImg   = $('#cp-img');
+    const cpTitle = $('#cp-title');
+    const cpQty   = $('#cp-qty');
+    const cpPrice = $('#cp-price');
+    const cpTotal = $('#cp-total');
+    const cpClose = $('#cp-close');
+    const cpContinue = $('#cp-continue');
 
     // Estado de filtros
     let state = {query:'', sort:'price-asc', protein:'', min:null, max:null, vegan:false, gf:false};
@@ -165,13 +140,25 @@
     const CART_KEY = 'enebar_cart';
     const getCart = () => { try{ return JSON.parse(localStorage.getItem(CART_KEY))||[] } catch { return []; } };
     const setCart = c => localStorage.setItem(CART_KEY, JSON.stringify(c));
+
     function addToCart(prod, qty=1){
       const cart = getCart();
       const i = cart.findIndex(p => p.id === prod.id);
-      if(i>-1){ cart[i].qty = (cart[i].qty||1) + qty; }
+      const inCartQty = i>-1 ? (cart[i].qty||1) : 0;
+
+      // Control de stock
+      if (typeof prod.stock === 'number' && inCartQty + qty > prod.stock) {
+        alert('No hay más stock disponible de este producto.');
+        return false;
+      }
+
+      if(i>-1){ cart[i].qty = inCartQty + qty; }
       else { cart.push({ id: prod.id, name: prod.name, price: prod.price, img: prod.img, flavor: prod.flavor, qty }); }
       setCart(cart);
+      return true;
     }
+    const cartQty  = () => getCart().reduce((a,i)=>a+(i.qty||1),0);
+    const cartTotal= () => getCart().reduce((a,i)=>a+i.price*(i.qty||1),0);
 
     // ================== LISTENERS ==================
     if(q) q.addEventListener('input', () => { state.query = q.value.trim().toLowerCase(); render(); });
@@ -203,17 +190,20 @@
     });
 
     // ================== POPUP ==================
-    function showCartPopup(item, qty=1){
+    function showCartPopup(item){
       if(!overlay) return;
       cpImg.src = item.img || 'https://placehold.co/100x100?text=Barrita';
       cpImg.alt = 'Barrita ' + item.name;
       cpTitle.textContent = item.name;
-      cpQty.textContent   = qty;
+
+      // cantidad de ese ítem en el carrito
+      const itemInCart = getCart().find(p=>p.id===item.id);
+      cpQty.textContent   = itemInCart?.qty || 1;
       cpPrice.textContent = money(item.price);
-      cpTotal.textContent = money(item.price * qty);
+      cpTotal.textContent = money(cartTotal()); // total del carrito
 
       overlay.hidden = false;
-      document.body.classList.add('modal-open'); // bloquea scroll
+      document.body.classList.add('modal-open');
 
       const close = () => {
         overlay.hidden = true;
@@ -225,7 +215,7 @@
       if(cpClose) cpClose.onclick = close;
       if(cpContinue) cpContinue.onclick = close;
       document.addEventListener('keydown', esc);
-      overlay.addEventListener('click', (e)=>{ if(e.target === overlay) close(); });
+      overlay.addEventListener('click', (e)=>{ if(e.target === overlay) close(); }, { once:false });
     }
 
     // ================== FILTROS ==================
@@ -253,7 +243,6 @@
         });
     }
 
-    // Filtros activos (para fallback defensivo)
     const hasActiveFilters = () =>
       (state.query && state.query.length) ||
       state.protein ||
@@ -272,37 +261,24 @@
       chips.innerHTML = arr.length ? arr.map(t=>`<span class="chip">${t}</span>`).join('') : '<span class="chip">Sin filtros</span>';
     }
 
-    // Enlaza los botones "Agregar" al carrito + popup
-    function attachAddHandlers(items){
-      document.querySelectorAll('.btn-add').forEach((btn, i) => {
-        const item = items[i];
-        if(!btn || !item || btn.disabled) return;
-        btn.onclick = () => {
-          addToCart(item, 1);
-          showCartPopup(item, 1);
-        };
-      });
-    }
-
     // ================== RENDER ==================
     function starsFrom(r){
       const full = Math.round(r*2)/2, on = Math.floor(full), half = full - on >= 0.5;
       return '★★★★★'.slice(0,on) + (half?'★':'') + '<span class="off">' + '★★★★★'.slice(0,5-on-(half?1:0)) + '</span>';
     }
 
+    function updateCount(listLen){
+      if(count) count.textContent = `${listLen} producto${listLen!==1?'s':''} · ${cartQty()} en el carrito`;
+    }
+
     function render(){
       let items = applyFilters(DATA);
-
-      // Fallback: si no hay filtros activos y quedó vacío, muestro todo.
-      if (!hasActiveFilters() && items.length === 0) {
-        items = DATA.slice();
-      }
+      if (!hasActiveFilters() && items.length === 0) items = DATA.slice();
 
       renderChips();
-      if(count) count.textContent = `${items.length} producto${items.length!==1?'s':''}`;
 
       catalog.innerHTML = items.map(x=>`
-        <article class="product-card">
+        <article class="product-card" data-id="${x.id}">
           <div class="media">
             <img src="${x.img || 'https://placehold.co/800x800?text=Barrita'}" alt="Barrita ${x.name}">
           </div>
@@ -338,9 +314,38 @@
       `).join('');
 
       if(empty) empty.style.display = items.length ? 'none' : 'block';
-      attachAddHandlers(items);
+      updateCount(items.length);
     }
 
+    // ===== Delegación de eventos para “Agregar” (robusto a re-render) =====
+    catalog.addEventListener('click', (e) => {
+      const btn = e.target.closest('.btn-add');
+      if(!btn) return;
+
+      const card = btn.closest('.product-card');
+      const id = Number(card?.dataset?.id);
+      const prod = DATA.find(p => p.id === id);
+      if(!prod) return;
+
+      if (prod.stock === 0) return; // defensa extra
+
+      const ok = addToCart(prod, 1);
+      if(ok){
+        updateCount(applyFilters(DATA).length);
+        showCartPopup(prod);
+      }
+    });
+
+    // Cerrar popup (seguridad por si el HTML está sin listeners)
+    const hardClose = () => {
+      overlay.hidden = true;
+      document.body.classList.remove('modal-open');
+    };
+    if(cpClose) cpClose.addEventListener('click', hardClose);
+    if(cpContinue) cpContinue.addEventListener('click', hardClose);
+    overlay?.addEventListener('click', (e)=>{ if(e.target === overlay) hardClose(); });
+
+    // Render inicial
     render();
   });
 </script>
