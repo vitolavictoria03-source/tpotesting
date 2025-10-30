@@ -103,15 +103,15 @@
 document.addEventListener('DOMContentLoaded', () => {
   // ================== DATA ==================
     const DATA = [
-      { id:1, name:'Power Almond Choco', flavor:'Chocolate, avena y almendras', ingredients:'Avena integral, almendras, chips de chocolate amargo, miel natural.', protein:18, price:1999, unitWeight:45, units:3, kcal:190, pricePerUnit:666, rating:4.6, stock:12, vegan:false, glutenFree:true, img:'img/almendraavenachips.png' },
-    { id:2, name:'White Crunch', flavor:'Chocolate blanco y almendra', ingredients:'Avena, almendras tostadas, chocolate blanco, semillas de chía y maní.', protein:15, price:2199, unitWeight:40, units:3, kcal:185, pricePerUnit:733, rating:4.4, stock:10, vegan:false, glutenFree:true, img:'img/almendrachoblancoavena.png' },
-    { id:3, name:'Tropical Energy', flavor:'Banana y pasas', ingredients:'Avena, pasas rubias, banana deshidratada, almendras y miel.', protein:12, price:1699, unitWeight:38, units:3, kcal:170, pricePerUnit:566, rating:4.3, stock:16, vegan:false, glutenFree:true, img:'img/almendrapasabanan.png' },
-    { id:4, name:'Vital Mix', flavor:'Semillas y pasas', ingredients:'Semillas de girasol, almendras, pasas negras, avena y miel orgánica.', protein:14, price:1799, unitWeight:40, units:3, kcal:175, pricePerUnit:599, rating:4.5, stock:8, vegan:true, glutenFree:true, img:'img/almendrapasassemilla.png' },
-    { id:5, name:'Green Pistachio Boost', flavor:'Pistacho y pasas', ingredients:'Pistachos, pasas negras, avena inflada y miel natural.', protein:20, price:2499, unitWeight:42, units:3, kcal:210, pricePerUnit:833, rating:4.8, stock:14, vegan:false, glutenFree:false, img:'img/apasaspistacho.png' },
-    { id:6, name:'Nut Fusion', flavor:'Avellanas, cajú y pasas', ingredients:'Avellanas, castañas de cajú, pasas rubias, avena y jarabe de arroz.', protein:11, price:1899, unitWeight:40, units:3, kcal:180, pricePerUnit:633, rating:4.1, stock:20, vegan:false, glutenFree:false, img:'img/avellanacajualmendrapasa.png' },
-    { id:7, name:'Dark Choco Raisin', flavor:'Chocolate negro y pasas', ingredients:'Avena, chips de cacao 70%, pasas negras, miel y aceite de coco.', protein:13, price:1899, unitWeight:40, units:3, kcal:185, pricePerUnit:633, rating:4.2, stock:15, vegan:false, glutenFree:true, img:'img/avenachocolatepasas.png' },
-    { id:8, name:'Apple Crunch', flavor:'Avena y manzana', ingredients:'Avena, trozos de manzana deshidratada, miel, canela y chía.', protein:10, price:1599, unitWeight:38, units:3, kcal:165, pricePerUnit:533, rating:4.1, stock:18, vegan:true, glutenFree:true, img:'img/avenamanzana.png' },
-    { id:9, name:'Coconut Trail', flavor:'Pasas y coco rallado', ingredients:'Avena inflada, pasas negras, coco rallado, almendras y miel.', protein:11, price:1699, unitWeight:38, units:3, kcal:170, pricePerUnit:566, rating:4.3, stock:17, vegan:true, glutenFree:true, img:'img/avenapasas.png' }
+      { id:1, name:'Power Almond Choco', flavor:'Chocolate, avena y almendras', ingredients:'Avena integral, almendras, chips de chocolate amargo, miel natural.', protein:18, price:1999, unitWeight:45, units:3, kcal:190, pricePerUnit:666, rating:4.6, stock:12, vegan:false, glutenFree:true, img:'almendraavenachips.png' },
+    { id:2, name:'White Crunch', flavor:'Chocolate blanco y almendra', ingredients:'Avena, almendras tostadas, chocolate blanco, semillas de chía y maní.', protein:15, price:2199, unitWeight:40, units:3, kcal:185, pricePerUnit:733, rating:4.4, stock:10, vegan:false, glutenFree:true, img:'almendrachoblancoavena.png' },
+    { id:3, name:'Tropical Energy', flavor:'Banana y pasas', ingredients:'Avena, pasas rubias, banana deshidratada, almendras y miel.', protein:12, price:1699, unitWeight:38, units:3, kcal:170, pricePerUnit:566, rating:4.3, stock:16, vegan:false, glutenFree:true, img:'almendrapasabanan.png' },
+    { id:4, name:'Vital Mix', flavor:'Semillas y pasas', ingredients:'Semillas de girasol, almendras, pasas negras, avena y miel orgánica.', protein:14, price:1799, unitWeight:40, units:3, kcal:175, pricePerUnit:599, rating:4.5, stock:8, vegan:true, glutenFree:true, img:'almendrapasassemilla.png' },
+    { id:5, name:'Green Pistachio Boost', flavor:'Pistacho y pasas', ingredients:'Pistachos, pasas negras, avena inflada y miel natural.', protein:20, price:2499, unitWeight:42, units:3, kcal:210, pricePerUnit:833, rating:4.8, stock:14, vegan:false, glutenFree:false, img:'apasaspistacho.png' },
+    { id:6, name:'Nut Fusion', flavor:'Avellanas, cajú y pasas', ingredients:'Avellanas, castañas de cajú, pasas rubias, avena y jarabe de arroz.', protein:11, price:1899, unitWeight:40, units:3, kcal:180, pricePerUnit:633, rating:4.1, stock:20, vegan:false, glutenFree:false, img:'avellanacajualmendrapasa.png' },
+    { id:7, name:'Dark Choco Raisin', flavor:'Chocolate negro y pasas', ingredients:'Avena, chips de cacao 70%, pasas negras, miel y aceite de coco.', protein:13, price:1899, unitWeight:40, units:3, kcal:185, pricePerUnit:633, rating:4.2, stock:15, vegan:false, glutenFree:true, img:'avenachocolatepasas.png' },
+    { id:8, name:'Apple Crunch', flavor:'Avena y manzana', ingredients:'Avena, trozos de manzana deshidratada, miel, canela y chía.', protein:10, price:1599, unitWeight:38, units:3, kcal:165, pricePerUnit:533, rating:4.1, stock:18, vegan:true, glutenFree:true, img:'avenamanzana.png' },
+    { id:9, name:'Coconut Trail', flavor:'Pasas y coco rallado', ingredients:'Avena inflada, pasas negras, coco rallado, almendras y miel.', protein:11, price:1699, unitWeight:38, units:3, kcal:170, pricePerUnit:566, rating:4.3, stock:17, vegan:true, glutenFree:true, img:'avenapasas.png' }
     ];
 
     // ================== HELPERS / REFS ==================
@@ -352,3 +352,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
