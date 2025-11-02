@@ -11,6 +11,13 @@
 <body>
   <header class="hero">
     <a href="index.html"><img src="logobanner.png" alt="Logo EneBar" class="logo"></a>
+    <!-- Ícono de carrito -->
+    <div class="top-actions">
+    <a class="cart-link" href="carrito.html" aria-label="Ir al carrito">
+      <i class="bi bi-cart3" style="font-size:2rem;"></i>  <!-- ↑ era 1.4rem -->
+      <span id="cart-badge" class="cart-badge" aria-live="polite">0</span>
+    </a>
+  </div>
   </header>
 
   <main class="catalog">
@@ -31,15 +38,29 @@
     <div class="catalog-layout">
       <aside class="filters">
         <h3>Filtros</h3>
+
+        <!-- CATEGORÍAS (chips/botones) -->
+        <div class="field">
+          <div class="categories as-filter" role="tablist" aria-label="Categorías">
+            <button class="cat-btn" data-cat="all" aria-pressed="true">Todas</button>
+            <button class="cat-btn" data-cat="organicas" aria-pressed="false">Orgánicas</button>
+            <button class="cat-btn" data-cat="frutos" aria-pressed="false">Con frutos secos</button>
+            <button class="cat-btn" data-cat="fibra" aria-pressed="false">Altas en fibra</button>
+            <button class="cat-btn" data-cat="veganas" aria-pressed="false">Veganas</button>
+            <button class="cat-btn" data-cat="sin-tacc" aria-pressed="false">Sin TACC</button>
+          </div>
+        </div>
+
         <div class="field">
           <label for="protein">Cantidad de proteína: <small>(por barra)</small></label>
           <select id="protein">
             <option value="">Todas</option>
             <option value="20+">20g o más</option>
-            <option value="10-19">10–19g</option>
+            <option value="10–19">10–19g</option>
             <option value="<10">Menos de 10g</option>
           </select>
         </div>
+
         <div class="field">
           <label><strong>Precio</strong></label>
           <div class="range">
@@ -47,8 +68,7 @@
             <input id="max" type="number" placeholder="Máx.">
           </div>
         </div>
-        <div class="field check"><input id="vegan" type="checkbox"> <label for="vegan">Vegano</label></div>
-        <div class="field check"><input id="gf" type="checkbox"> <label for="gf">Apto celíacos (Sin TACC)</label></div>
+
         <button id="clear" class="btn btn-clear">Limpiar filtros</button>
       </aside>
 
@@ -99,257 +119,324 @@
       </div>
     </div>
   </footer>
-  <script>
+
+<script>
 document.addEventListener('DOMContentLoaded', () => {
   // ================== DATA ==================
-    const DATA = [
-      { id:1, name:'Power Almond Choco', flavor:'Chocolate, avena y almendras', ingredients:'Avena integral, almendras, chips de chocolate amargo, miel natural.', protein:18, price:1999, unitWeight:45, units:3, kcal:190, pricePerUnit:666, rating:4.6, stock:12, vegan:false, glutenFree:true, img:'almendraavenachips.png' },
-    { id:2, name:'White Crunch', flavor:'Chocolate blanco y almendra', ingredients:'Avena, almendras tostadas, chocolate blanco, semillas de chía y maní.', protein:15, price:2199, unitWeight:40, units:3, kcal:185, pricePerUnit:733, rating:4.4, stock:10, vegan:false, glutenFree:true, img:'almendrachoblancoavena.png' },
-    { id:3, name:'Tropical Energy', flavor:'Banana y pasas', ingredients:'Avena, pasas rubias, banana deshidratada, almendras y miel.', protein:12, price:1699, unitWeight:38, units:3, kcal:170, pricePerUnit:566, rating:4.3, stock:16, vegan:false, glutenFree:true, img:'almendrapasabanan.png' },
-    { id:4, name:'Vital Mix', flavor:'Semillas y pasas', ingredients:'Semillas de girasol, almendras, pasas negras, avena y miel orgánica.', protein:14, price:1799, unitWeight:40, units:3, kcal:175, pricePerUnit:599, rating:4.5, stock:8, vegan:true, glutenFree:true, img:'almendrapasassemilla.png' },
-    { id:5, name:'Green Pistachio Boost', flavor:'Pistacho y pasas', ingredients:'Pistachos, pasas negras, avena inflada y miel natural.', protein:20, price:2499, unitWeight:42, units:3, kcal:210, pricePerUnit:833, rating:4.8, stock:14, vegan:false, glutenFree:false, img:'apasaspistacho.png' },
-    { id:6, name:'Nut Fusion', flavor:'Avellanas, cajú y pasas', ingredients:'Avellanas, castañas de cajú, pasas rubias, avena y jarabe de arroz.', protein:11, price:1899, unitWeight:40, units:3, kcal:180, pricePerUnit:633, rating:4.1, stock:20, vegan:false, glutenFree:false, img:'avellanacajualmendrapasa.png' },
-    { id:7, name:'Dark Choco Raisin', flavor:'Chocolate negro y pasas', ingredients:'Avena, chips de cacao 70%, pasas negras, miel y aceite de coco.', protein:13, price:1899, unitWeight:40, units:3, kcal:185, pricePerUnit:633, rating:4.2, stock:15, vegan:false, glutenFree:true, img:'avenachocolatepasas.png' },
-    { id:8, name:'Apple Crunch', flavor:'Avena y manzana', ingredients:'Avena, trozos de manzana deshidratada, miel, canela y chía.', protein:10, price:1599, unitWeight:38, units:3, kcal:165, pricePerUnit:533, rating:4.1, stock:18, vegan:true, glutenFree:true, img:'avenamanzana.png' },
-    { id:9, name:'Coconut Trail', flavor:'Pasas y coco rallado', ingredients:'Avena inflada, pasas negras, coco rallado, almendras y miel.', protein:11, price:1699, unitWeight:38, units:3, kcal:170, pricePerUnit:566, rating:4.3, stock:17, vegan:true, glutenFree:true, img:'avenapasas.png' }
-    ];
+  const DATA = [
+    { id:1, name:'Power Almond Choco', flavor:'Chocolate, avena y almendras', ingredients:'Avena integral, almendras, chips de chocolate amargo, miel natural.', protein:18, price:1300, unitWeight:45, units:3, kcal:190, rating:4.6, stock:12, vegan:false, glutenFree:false, organic:true, highFiber:true,  img:'img/almendraavenachips.png' },
+    { id:2, name:'White Crunch',        flavor:'Chocolate blanco y almendra', ingredients:'Avena, almendras tostadas, chocolate blanco, semillas de chía y maní.', protein:22, price:1500, unitWeight:40, units:3, kcal:185, rating:4.4, stock:10, vegan:true,  glutenFree:true,  organic:false, highFiber:false, img:'img/almendrachoblancoavena.png' },
+    { id:3, name:'Tropical Energy',     flavor:'Banana y pasas',              ingredients:'Avena, pasas rubias, banana deshidratada, almendras y miel.',          protein:12, price:1800, unitWeight:38, units:3, kcal:170, rating:4.3, stock:16, vegan:true,  glutenFree:true,  organic:false, highFiber:true,  img:'img/almendrapasabanan.png' },
+    { id:4, name:'Vital Mix',           flavor:'Semillas y pasas',            ingredients:'Semillas de girasol, almendras, pasas negras, avena y miel orgánica.', protein:15, price:1950, unitWeight:40, units:3, kcal:175, rating:4.5, stock:8,  vegan:true,  glutenFree:true,  organic:true,  highFiber:true,  img:'img/almendrapasassemilla.png' },
+    { id:5, name:'Green Pistachio Boost', flavor:'Pistacho y pasas',          ingredients:'Pistachos, pasas negras, avena inflada y miel natural.',              protein:20, price:2500, unitWeight:42, units:3, kcal:210, rating:4.8, stock:14, vegan:false, glutenFree:true,  organic:false, highFiber:false, img:'img/apasaspistacho.png' },
+    { id:6, name:'Nut Fusion',          flavor:'Avellanas, cajú y pasas',     ingredients:'Avellanas, castañas de cajú, pasas rubias, avena y jarabe de arroz.', protein:9,  price:1050, unitWeight:40, units:3, kcal:180, rating:4.1, stock:20, vegan:false, glutenFree:false, organic:false, highFiber:false, img:'img/avellanacajualmendrapasa.png' },
+    { id:7, name:'Dark Choco Raisin',   flavor:'Chocolate negro y pasas',     ingredients:'Avena, chips de cacao 70%, pasas negras, miel y aceite de coco.',   protein:5,  price:950,  unitWeight:40, units:3, kcal:185, rating:4.2, stock:15, vegan:false, glutenFree:false, organic:true, highFiber:false, img:'img/avenachocolatepasas.png' },
+    { id:8, name:'Apple Crunch',        flavor:'Avena y manzana',             ingredients:'Avena, trozos de manzana deshidratada, miel, canela y chía.',        protein:10, price:1100, unitWeight:38, units:3, kcal:165, rating:4.1, stock:18, vegan:false, glutenFree:true,  organic:false, highFiber:true,  img:'img/avenamanzana.png' },
+    { id:9, name:'Coconut Trail',       flavor:'Pasas y coco rallado',        ingredients:'Avena inflada, pasas negras, coco rallado, almendras y miel.',       protein:11, price:1600, unitWeight:38, units:3, kcal:170, rating:4.3, stock:17, vegan:true,  glutenFree:true,  organic:false, highFiber:true,  img:'img/avenapasas.png' }
+  ];
 
-    // ================== HELPERS / REFS ==================
-    const $  = s => document.querySelector(s);
-    const money = n => n.toLocaleString('es-AR',{style:'currency',currency:'ARS'});
+  // ================== HELPERS / REFS ==================
+  const $  = s => document.querySelector(s);
+  const money = n => n.toLocaleString('es-AR',{style:'currency',currency:'ARS'});
+  const norm = s => (s||'').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
 
-    // Filtros / UI
-    const q=$('#q'), sort=$('#sort'), protein=$('#protein'), min=$('#min'), max=$('#max');
-    const vegan=$('#vegan'), gf=$('#gf'), clear=$('#clear'), chips=$('#active-chips');
-    const catalog=$('#catalog'), count=$('#count'), empty=$('#empty');
+  // Filtros / UI
+  const q=$('#q'), sort=$('#sort'), protein=$('#protein'), min=$('#min'), max=$('#max');
+  const clear=$('#clear'), chips=$('#active-chips');
+  const catalog=$('#catalog'), count=$('#count'), empty=$('#empty');
+  const cartBadge = $('#cart-badge');
 
-    // Popup carrito
-    const overlay = $('#cart-overlay');
-    const cpImg   = $('#cp-img');
-    const cpTitle = $('#cp-title');
-    const cpQty   = $('#cp-qty');
-    const cpPrice = $('#cp-price');
-    const cpTotal = $('#cp-total');
-    const cpClose = $('#cp-close');
-    const cpContinue = $('#cp-continue');
+  // Categorías (multiselección)
+  const catButtons = Array.from(document.querySelectorAll('.cat-btn'));
+  const ALL_CAT = 'all';
 
-    // Estado de filtros
-    let state = {query:'', sort:'price-asc', protein:'', min:null, max:null, vegan:false, gf:false};
+  // Popup carrito
+  const overlay = $('#cart-overlay');
+  const cpImg   = $('#cp-img');
+  const cpTitle = $('#cp-title');
+  const cpQty   = $('#cp-qty');
+  const cpPrice = $('#cp-price');
+  const cpTotal = $('#cp-total');
+  const cpClose = $('#cp-close');
+  const cpContinue = $('#cp-continue');
 
-    // ================== CART (localStorage) ==================
-    const CART_KEY = 'enebar_cart';
-    const getCart = () => { try{ return JSON.parse(localStorage.getItem(CART_KEY))||[] } catch { return []; } };
-    const setCart = c => localStorage.setItem(CART_KEY, JSON.stringify(c));
+  // Estado de filtros
+  let state = {query:'', sort:'price-asc', protein:'', min:null, max:null, cats:new Set([ALL_CAT])};
 
-    function addToCart(prod, qty=1){
-      const cart = getCart();
-      const i = cart.findIndex(p => p.id === prod.id);
-      const inCartQty = i>-1 ? (cart[i].qty||1) : 0;
-
-      // Control de stock
-      if (typeof prod.stock === 'number' && inCartQty + qty > prod.stock) {
-        alert('No hay más stock disponible de este producto.');
-        return false;
-      }
-
-      if(i>-1){ cart[i].qty = inCartQty + qty; }
-      else { cart.push({ id: prod.id, name: prod.name, price: prod.price, img: prod.img, flavor: prod.flavor, qty }); }
-      setCart(cart);
-      return true;
+  // ================== CART ==================
+  const CART_KEY = 'enebar_cart';
+  const getCart = () => { try{ return JSON.parse(localStorage.getItem(CART_KEY))||[] } catch { return []; } };
+  const setCart = c => localStorage.setItem(CART_KEY, JSON.stringify(c));
+  function addToCart(prod, qty=1){
+    const cart = getCart();
+    const i = cart.findIndex(p => p.id === prod.id);
+    const inCartQty = i>-1 ? (cart[i].qty||1) : 0;
+    if (typeof prod.stock === 'number' && inCartQty + qty > prod.stock) {
+      alert('No hay más stock disponible de este producto.');
+      return false;
     }
-    const cartQty  = () => getCart().reduce((a,i)=>a+(i.qty||1),0);
-    const cartTotal= () => getCart().reduce((a,i)=>a+i.price*(i.qty||1),0);
+    if(i>-1){ cart[i].qty = inCartQty + qty; }
+    else { cart.push({ id: prod.id, name: prod.name, price: prod.price, img: prod.img, flavor: prod.flavor, qty }); }
+    setCart(cart);
+    return true;
+  }
+  const cartQty   = () => getCart().reduce((a,i)=>a+(i.qty||1),0);
+  const cartTotal = () => getCart().reduce((a,i)=>a+i.price*(i.qty||1),0);
 
-    // ================== LISTENERS ==================
-    if(q) q.addEventListener('input', () => { state.query = q.value.trim().toLowerCase(); render(); });
-    if(sort) sort.addEventListener('change', () => { state.sort = sort.value; render(); });
-    if(protein) protein.addEventListener('change', () => { state.protein = protein.value; render(); });
-
-    const syncPrice = () => {
-      const minVal = Number(min?.value);
-      const maxVal = Number(max?.value);
-      state.min = Number.isFinite(minVal) && min && min.value!=='' ? minVal : null;
-      state.max = Number.isFinite(maxVal) && max && max.value!=='' ? maxVal : null;
-      render();
+  // ================== POPUP ==================
+  function showCartPopup(item){
+    if(!overlay) return;
+    cpImg.src = item.img || 'https://placehold.co/100x100?text=Barrita';
+    cpImg.alt = 'Barrita ' + item.name;
+    cpTitle.textContent = item.name;
+    const itemInCart = getCart().find(p=>p.id===item.id);
+    cpQty.textContent   = itemInCart?.qty || 1;
+    cpPrice.textContent = money(item.price);
+    cpTotal.textContent = money(cartTotal());
+    overlay.hidden = false;
+    document.body.classList.add('modal-open');
+    const close = () => {
+      overlay.hidden = true;
+      document.body.classList.remove('modal-open');
+      document.removeEventListener('keydown', esc);
     };
-    if(min){ min.addEventListener('input', syncPrice); }
-    if(max){ max.addEventListener('input', syncPrice); }
-    if(vegan) vegan.addEventListener('change', () => { state.vegan = vegan.checked; render(); });
-    if(gf) gf.addEventListener('change', () => { state.gf = gf.checked; render(); });
+    const esc = e => { if(e.key === 'Escape') close(); };
+    if (cpClose) cpClose.onclick = close;
+    if (cpContinue) cpContinue.onclick = close;
+    document.addEventListener('keydown', esc);
+    overlay.addEventListener('click', (e)=>{ if(e.target === overlay) close(); });
+  }
 
-    if(clear) clear.addEventListener('click', () => {
-      state = {query:'', sort:'price-asc', protein:'', min:null, max:null, vegan:false, gf:false};
-      if(q) q.value='';
-      if(sort) sort.value='price-asc';
-      if(protein) protein.value='';
-      if(min) min.value='';
-      if(max) max.value='';
-      if(vegan) vegan.checked=false;
-      if(gf) gf.checked=false;
+  // ================== LISTENERS ==================
+  if (q) q.addEventListener('input', () => { state.query = norm(q.value); render(); });
+  if (sort) sort.addEventListener('change', () => { state.sort = sort.value; render(); });
+
+  // Multiselección de categorías (OR). "Todas" limpia el resto.
+  catButtons.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const cat = btn.dataset.cat;
+      const pressed = btn.getAttribute('aria-pressed') === 'true';
+
+      if (cat === ALL_CAT) {
+        // activar "Todas"
+        state.cats = new Set([ALL_CAT]);
+        catButtons.forEach(b=>b.setAttribute('aria-pressed', b.dataset.cat===ALL_CAT ? 'true':'false'));
+      } else {
+        // quitar "Todas"
+        state.cats.delete(ALL_CAT);
+        // toggle individual
+        btn.setAttribute('aria-pressed', (!pressed).toString());
+        if (!pressed) state.cats.add(cat); else state.cats.delete(cat);
+
+        // si no queda ninguna seleccionada, volver a "Todas"
+        if (state.cats.size === 0) {
+          state.cats.add(ALL_CAT);
+          catButtons.find(b=>b.dataset.cat===ALL_CAT)?.setAttribute('aria-pressed','true');
+        }
+        // asegurar que el botón "Todas" muestre off cuando hay otras
+        const allBtn = catButtons.find(b=>b.dataset.cat===ALL_CAT);
+        if (allBtn) allBtn.setAttribute('aria-pressed', state.cats.has(ALL_CAT) ? 'true':'false');
+      }
       render();
     });
+  });
 
-    // ================== POPUP ==================
-    function showCartPopup(item){
-      if(!overlay) return;
-      cpImg.src = item.img || 'https://placehold.co/100x100?text=Barrita';
-      cpImg.alt = 'Barrita ' + item.name;
-      cpTitle.textContent = item.name;
+  // Select proteína
+  if (protein) protein.addEventListener('change', () => {
+    state.protein = protein.value.replace(/\u2013/g, '-').trim();
+    render();
+  });
 
-      // cantidad de ese ítem en el carrito
-      const itemInCart = getCart().find(p=>p.id===item.id);
-      cpQty.textContent   = itemInCart?.qty || 1;
-      cpPrice.textContent = money(item.price);
-      cpTotal.textContent = money(cartTotal()); // total del carrito
+  const syncPrice = () => {
+    const minVal = min && min.value!=='' ? Number(min.value) : null;
+    const maxVal = max && max.value!=='' ? Number(max.value) : null;
+    state.min = Number.isFinite(minVal) ? minVal : null;
+    state.max = Number.isFinite(maxVal) ? maxVal : null;
+    render();
+  };
+  if (min) min.addEventListener('input', syncPrice);
+  if (max) max.addEventListener('input', syncPrice);
 
-      overlay.hidden = false;
-      document.body.classList.add('modal-open');
+  if (clear) clear.addEventListener('click', () => {
+    state = {query:'', sort:'price-asc', protein:'', min:null, max:null, cats:new Set([ALL_CAT])};
+    if(q) q.value='';
+    if(sort) sort.value='price-asc';
+    if(protein) protein.value='';
+    if(min) min.value='';
+    if(max) max.value='';
+    catButtons.forEach(b=>b.setAttribute('aria-pressed', b.dataset.cat===ALL_CAT ? 'true':'false'));
+    render();
+  });
 
-      const close = () => {
-        overlay.hidden = true;
-        document.body.classList.remove('modal-open');
-        document.removeEventListener('keydown', esc);
-      };
-      const esc = e => { if(e.key === 'Escape') close(); };
+  // ================== FILTROS ==================
+  function applyFilters(data){
+    const proteinBand = (state.protein || '').replace(/\u2013/g, '-');
+    const qn = norm(state.query);
+    const nutsRegex = /(almendra|avellana|nuez|pistacho|mani|man[ií]|caju|caj[uú])/i;
 
-      if(cpClose) cpClose.onclick = close;
-      if(cpContinue) cpContinue.onclick = close;
-      document.addEventListener('keydown', esc);
-      overlay.addEventListener('click', (e)=>{ if(e.target === overlay) close(); }, { once:false });
-    }
+    const selectedCats = [...state.cats].filter(c=>c!==ALL_CAT); // vacía => sin filtro por categoría
 
-    // ================== FILTROS ==================
-    function applyFilters(data){
-      return data
-        .filter(x => {
-          if (state.query && !(`${x.name} ${x.flavor}`.toLowerCase().includes(state.query))) return false;
-          if (state.protein==='20+'   && !(x.protein>=20)) return false;
-          if (state.protein==='10-19' && !(x.protein>=10 && x.protein<=19)) return false;
-          if (state.protein==='<10'   && !(x.protein<10)) return false;
-          if (state.vegan && !x.vegan) return false;
-          if (state.gf && !x.glutenFree) return false;
-          if (state.min!=null && x.price < state.min) return false;
-          if (state.max!=null && x.price > state.max) return false;
-          return true;
-        })
-        .sort((a,b) => {
-          switch(state.sort){
-            case 'price-asc':    return a.price - b.price;
-            case 'price-desc':   return b.price - a.price;
-            case 'protein-desc': return b.protein - a.protein;
-            case 'protein-asc':  return a.protein - b.protein;
-            default: return 0;
+    return data
+      .filter(x => {
+        // CATEGORÍAS (OR entre seleccionadas)
+        if (selectedCats.length) {
+          const matches = selectedCats.some(cat => (
+            (cat==='organicas' && x.organic) ||
+            (cat==='frutos'    && nutsRegex.test(x.ingredients)) ||
+            (cat==='fibra'     && x.highFiber) ||
+            (cat==='veganas'   && x.vegan) ||
+            (cat==='sin-tacc'  && x.glutenFree)
+          ));
+          if (!matches) return false;
+        }
+
+        // búsqueda por nombre/sabor/ingredientes
+        if (qn && !(norm(x.name).includes(qn) || norm(x.flavor).includes(qn) || norm(x.ingredients).includes(qn))) {
+          return false;
+        }
+
+        // proteína (select)
+        if (proteinBand==='20+'   && !(x.protein>=20)) return false;
+        if (proteinBand==='10-19' && !(x.protein>=10 && x.protein<=19)) return false;
+        if (proteinBand==='<10'   && !(x.protein<10)) return false;
+
+        // precio
+        if (state.min!=null && x.price < state.min) return false;
+        if (state.max!=null && x.price > state.max) return false;
+
+        return true;
+      })
+      .sort((a,b) => {
+        switch(state.sort){
+          case 'price-asc':    return a.price - b.price;
+          case 'price-desc':   return b.price - a.price;
+          case 'protein-desc': return b.protein - a.protein;
+          case 'protein-asc':  return a.protein - b.protein;
+          default: return 0;
+        }
+      });
+  }
+
+  const hasActiveFilters = () =>
+    (state.query && state.query.length) || state.protein ||
+    state.min != null || state.max != null || (state.cats.size && !state.cats.has(ALL_CAT));
+
+  function renderChips(){
+    if(!chips) return;
+    const arr = [];
+    if(state.query)     arr.push(`Búsqueda: "${state.query}"`);
+    if(state.cats.size && !state.cats.has(ALL_CAT))
+      arr.push(`Categorías: ${[...state.cats].join(', ')}`);
+    if(state.protein)   arr.push(`Proteína: ${state.protein}`);
+    if(state.min!=null) arr.push(`Min: ${money(state.min)}`);
+    if(state.max!=null) arr.push(`Max: ${money(state.max)}`);
+    chips.innerHTML = arr.length ? arr.map(t=>`<span class="chip">${t}</span>`).join('') : '<span class="chip">Sin filtros</span>';
+  }
+
+  // ================== RENDER ==================
+  function starsFrom(r){
+    const full = Math.round(r*2)/2, on = Math.floor(full), half = full - on >= 0.5;
+    return '★★★★★'.slice(0,on) + (half?'★':'') + '<span class="off">' + '★★★★★'.slice(0,5-on-(half?1:0)) + '</span>';
+  }
+  function updateCount(listLen){
+    if(count) count.textContent = `${listLen} producto${listLen!==1?'s':''} · ${cartQty()} en el carrito`;
+    if(cartBadge) cartBadge.textContent = String(cartQty());
+  }
+
+  function render(){
+    let items = applyFilters(DATA);
+    if (!hasActiveFilters() && items.length === 0) items = DATA.slice();
+    renderChips();
+
+    catalog.innerHTML = items.map(x=>`
+      <article class="product-card" data-id="${x.id}">
+        <div class="media">
+          <img src="${x.img || 'https://placehold.co/800x800?text=Barrita'}" alt="Barrita ${x.name}">
+        </div>
+        <div class="body">
+          <div>
+            ${x.glutenFree ? '<span class="badge">Sin TACC</span>' : ''}
+          </div>
+          <h3 class="title">${x.name}</h3>
+          <ul class="specs">
+            <li><strong>Sabor:</strong> ${x.flavor}</li>
+            <li><strong>Proteína:</strong> ${x.protein} g por barra</li>
+            <li><strong>Pack:</strong> ${x.units} unidades · ${x.unitWeight} g c/u</li>
+            <li><strong>Calorías:</strong> ${x.kcal} kcal c/u</li>
+          </ul>
+
+          <button class="ingredients-toggle" data-id="${x.id}" aria-expanded="false">
+            <i class="bi bi-chevron-down chev" aria-hidden="true"></i>
+            <span>Ver ingredientes</span>
+          </button>
+          <div class="ingredients" id="ing-${x.id}">
+            <p><strong>Ingredientes:</strong> ${x.ingredients}</p>
+          </div>
+
+          <div class="rating">
+            <span class="stars">${starsFrom(x.rating)}</span>
+            <span>${x.rating.toFixed(1)}</span>
+          </div>
+        </div>
+        <div class="footer">
+          <div class="price-row">
+            <div class="price">${money(x.price)}</div>
+          </div>
+          ${
+            x.stock>0
+              ? `<button class="btn-add"><i class="bi bi-cart-plus"></i> Agregar</button>`
+              : `<button class="btn-add" disabled style="opacity:.6;cursor:not-allowed"><i class="bi bi-x-circle"></i> Sin stock</button>`
           }
-        });
-    }
+        </div>
+      </article>
+    `).join('');
 
-    const hasActiveFilters = () =>
-      (state.query && state.query.length) ||
-      state.protein ||
-      state.vegan || state.gf ||
-      state.min != null || state.max != null;
+    if(empty) empty.style.display = items.length ? 'none' : 'block';
+    updateCount(items.length);
+  }
 
-    function renderChips(){
-      if(!chips) return;
-      const arr = [];
-      if(state.query)   arr.push(`Búsqueda: "${state.query}"`);
-      if(state.protein) arr.push(`Proteína: ${state.protein}`);
-      if(state.min!=null) arr.push(`Min: ${money(state.min)}`);
-      if(state.max!=null) arr.push(`Max: ${money(state.max)}`);
-      if(state.vegan)   arr.push('Vegano');
-      if(state.gf)      arr.push('Sin TACC');
-      chips.innerHTML = arr.length ? arr.map(t=>`<span class="chip">${t}</span>`).join('') : '<span class="chip">Sin filtros</span>';
-    }
-
-    // ================== RENDER ==================
-    function starsFrom(r){
-      const full = Math.round(r*2)/2, on = Math.floor(full), half = full - on >= 0.5;
-      return '★★★★★'.slice(0,on) + (half?'★':'') + '<span class="off">' + '★★★★★'.slice(0,5-on-(half?1:0)) + '</span>';
-    }
-
-    function updateCount(listLen){
-      if(count) count.textContent = `${listLen} producto${listLen!==1?'s':''} · ${cartQty()} en el carrito`;
-    }
-
-    function render(){
-      let items = applyFilters(DATA);
-      if (!hasActiveFilters() && items.length === 0) items = DATA.slice();
-
-      renderChips();
-
-      catalog.innerHTML = items.map(x=>`
-        <article class="product-card" data-id="${x.id}">
-          <div class="media">
-            <img src="${x.img || 'https://placehold.co/800x800?text=Barrita'}" alt="Barrita ${x.name}">
-          </div>
-          <div class="body">
-            <div>
-              ${x.glutenFree ? '<span class="badge">Sin TACC</span>' : ''}
-              ${x.vegan ? '<span class="badge">Vegano</span>' : ''}
-            </div>
-            <h3 class="title">${x.name}</h3>
-            <ul class="specs">
-              <li><strong>Sabor:</strong> ${x.flavor}</li>
-              <li><strong>Proteína:</strong> ${x.protein} g por barra</li>
-              <li><strong>Pack:</strong> ${x.units} unidades · ${x.unitWeight} g c/u</li>
-              <li><strong>Calorías:</strong> ${x.kcal} kcal c/u</li>
-            </ul>
-            <div class="rating">
-              <span class="stars">${starsFrom(x.rating)}</span>
-              <span>${x.rating.toFixed(1)}</span>
-            </div>
-          </div>
-          <div class="footer">
-            <div class="price-row">
-              <div class="price">${money(x.price)}</div>
-              <div class="unit">(${money(x.pricePerUnit)}/u)</div>
-            </div>
-            ${
-              x.stock>0
-                ? `<button class="btn-add"><i class="bi bi-cart-plus"></i> Agregar</button>`
-                : `<button class="btn-add" disabled style="opacity:.6;cursor:not-allowed"><i class="bi bi-x-circle"></i> Sin stock</button>`
-            }
-          </div>
-        </article>
-      `).join('');
-
-      if(empty) empty.style.display = items.length ? 'none' : 'block';
-      updateCount(items.length);
-    }
-
-    // ===== Delegación de eventos para “Agregar” (robusto a re-render) =====
-    catalog.addEventListener('click', (e) => {
-      const btn = e.target.closest('.btn-add');
-      if(!btn) return;
-
+  
+  // ===== Delegaciones de eventos =====
+  catalog.addEventListener('click', (e) => {
+    const btn = e.target.closest('.btn-add');
+    if(btn){
       const card = btn.closest('.product-card');
       const id = Number(card?.dataset?.id);
       const prod = DATA.find(p => p.id === id);
-      if(!prod) return;
-
-      if (prod.stock === 0) return; // defensa extra
-
+      if(!prod || prod.stock === 0) return;
       const ok = addToCart(prod, 1);
       if(ok){
         updateCount(applyFilters(DATA).length);
         showCartPopup(prod);
       }
-    });
+      return;
+    }
 
-    // Cerrar popup (seguridad por si el HTML está sin listeners)
-    const hardClose = () => {
-      overlay.hidden = true;
-      document.body.classList.remove('modal-open');
-    };
-    if(cpClose) cpClose.addEventListener('click', hardClose);
-    if(cpContinue) cpContinue.addEventListener('click', hardClose);
-    overlay?.addEventListener('click', (e)=>{ if(e.target === overlay) hardClose(); });
-
-    // Render inicial
-    render();
+    const tgl = e.target.closest('.ingredients-toggle');
+    if(tgl){
+      const id = tgl.dataset.id;
+      const ing = document.getElementById('ing-' + id);
+      const label = tgl.querySelector('span');
+      const expanded = tgl.getAttribute('aria-expanded') === 'true';
+      tgl.setAttribute('aria-expanded', String(!expanded));
+      label.textContent = expanded ? 'Ver ingredientes' : 'Ocultar ingredientes';
+      ing?.classList.toggle('open', !expanded);
+    }
   });
-</script>
 
+  // Cerrar popup 
+  const hardClose = () => {
+    overlay.hidden = true;
+    document.body.classList.remove('modal-open');
+  };
+  if (cpClose) cpClose.addEventListener('click', hardClose);
+  if (cpContinue) cpContinue.addEventListener('click', hardClose);
+  overlay?.addEventListener('click', (e)=>{ if(e.target === overlay) hardClose(); });
+
+  // Render inicial
+  render();
+  updateCount(applyFilters(DATA).length);
+});
+</script>
 </body>
 </html>
-
