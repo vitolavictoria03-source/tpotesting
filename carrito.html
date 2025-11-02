@@ -37,7 +37,7 @@
 
     @media (max-width: 900px){ .cart-grid{grid-template-columns:1fr;} .cart-item{grid-template-columns:92px 1fr 100px 28px;} }
 
-    /* ====== Popup de éxito ====== */
+    /* ====== Popup genérico (éxito y vacío) ====== */
     .checkout-overlay[hidden]{display:none;}
     .checkout-overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.45);z-index:9999;padding:16px;}
     .checkout-popup{background:#FAEFE6;color:#3C2313;border:2px solid #E0CDBB;border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,.25);width:min(95vw,420px);padding:22px;text-align:center;animation:fadeIn .2s ease-out;}
@@ -51,10 +51,10 @@
     .ck-btn.light:hover{background:#E7CDB6;}
   </style>
 </head>
-<body>
+<body class="center">
   <!-- Header -->
   <header class="hero">
-    <img src="logobanner.png" alt="Logo EneBar" class="logo">
+    <a href="index.html"><img src="logobanner.png" alt="Logo EneBar" class="logo"></a>
   </header>
 
   <main class="cart-wrap">
@@ -78,30 +78,51 @@
     </div>
   </main>
 
-  <!-- Footer breve (si querés pegá tu footer completo) -->
+  <!-- Footer breve -->
   <footer class="site-footer">
-    <div class="footer-wrap">
-      <p class="footer-eyebrow">Conoce más sobre</p>
-      <img src="logofooter.png" class="footer-logo" alt="Logo EneBar">
-      <ul class="footer-links">
-        <li><a href="productos.html">Nuestras Barritas</a></li>
-        <li><a href="#">¿Quiénes somos?</a></li>
-      </ul>
-      <div class="footer-icons">
-        <a href="https://instagram.com" target="_blank" rel="noopener"><i class="bi bi-instagram" style="font-size:1.3rem;"></i></a>
-        <a href="mailto:contacto@enebar.com"><i class="bi bi-envelope" style="font-size:1.3rem;"></i></a>
+      <div class="footer-wrap">
+        <p class="footer-eyebrow">Conoce más sobre</p>
+        <img src="logofooter.png" alt="Logo EneBar" class="footer-logo">
+        <ul class="footer-links">
+          <li><a href="#">¿Quienes somos?</a></li>
+          <li><a href="#">¿Dónde encontrarnos?</a></li>
+          <li><a href="productos.html">Nuestras Barritas</a></li>
+          <li><a href="#">Contactanos</a></li>
+          <li><a href="#">Nuestras Redes</a></li>
+        </ul>
+        <div class="footer-icons">
+          <a href="https://instagram.com" aria-label="Instagram" target="_blank" rel="noopener">
+            <i class="bi bi-instagram" style="font-size:1.3rem;"></i>
+          </a>
+          <a href="https://twitter.com" aria-label="Twitter" target="_blank" rel="noopener">
+            <i class="bi bi-twitter" style="font-size:1.3rem;"></i>
+          </a>
+          <a href="mailto:contacto@enebar.com" aria-label="Email">
+            <i class="bi bi-envelope" style="font-size:1.3rem;"></i>
+          </a>
+        </div>
       </div>
-    </div>
-  </footer>
+    </footer>
 
   <!-- Popup de compra realizada -->
   <div id="checkout-overlay" class="checkout-overlay" hidden>
-    <div class="checkout-popup">
-      <h2 class="ck-title">¡Compra realizada!</h2>
-      <p class="ck-text">Gracias por comprar en <strong>EneBar</strong> 🧡</p>
+    <div class="checkout-popup" role="dialog" aria-modal="true" aria-labelledby="ck-title-ok">
+      <h2 id="ck-title-ok" class="ck-title">¡Compra realizada!</h2>
+      <p class="ck-text">Gracias por comprar en <strong>EneBar</strong></p>
       <div class="ck-actions">
         <a href="productos.html" class="ck-btn light">Seguir comprando</a>
         <a href="index.html" class="ck-btn">Entendido</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup carrito vacío -->
+  <div id="empty-overlay" class="checkout-overlay" hidden>
+    <div class="checkout-popup" role="dialog" aria-modal="true" aria-labelledby="ck-title-empty">
+      <h2 id="ck-title-empty" class="ck-title">Tu carrito está vacío</h2>
+      <div class="ck-actions">
+        <a href="productos.html" class="ck-btn">Ir a productos</a>
+        <button id="empty-close" class="ck-btn light" type="button">Cerrar</button>
       </div>
     </div>
   </div>
@@ -121,7 +142,6 @@
     }
     function saveCart(items){ localStorage.setItem(CART_KEY, JSON.stringify(items)); }
 
-    // DEMO: si llega vacío, mostramos texto; (opcional) podés cargar un dummy
     let cart = loadCart();
 
     // ------- Render -------
@@ -153,12 +173,10 @@
         </article>
       `).join('');
 
-      // Totales
       const subtotal = cart.reduce((s,it)=> s + (it.price||0)*(it.qty||1), 0);
       sumSub.textContent = money(subtotal);
       sumTotal.textContent = money(subtotal);
 
-      // Handlers por item
       list.querySelectorAll('.cart-item').forEach(row=>{
         const i = +row.dataset.i;
         const minus = row.querySelector('.btn-minus');
@@ -180,16 +198,33 @@
     }
 
     // ------- Finalizar compra -------
-    const overlay = document.getElementById('checkout-overlay');
+    const overlay = document.getElementById('checkout-overlay');   // éxito
+    const emptyOverlay = document.getElementById('empty-overlay');  // vacío
     const btnCheckout = document.getElementById('btn-checkout');
+
     btnCheckout.addEventListener('click', ()=>{
-      if(!cart.length){ alert('Tu carrito está vacío.'); return; }
+      if(!cart.length){
+        emptyOverlay.hidden = false;   // mostrar popup vacío
+        return;
+      }
       // aquí iría tu POST/checkout real; simulamos éxito:
       overlay.hidden = false;
-      // limpiar carrito al confirmar
       localStorage.removeItem(CART_KEY);
       cart = [];
       renderCart();
+    });
+
+    // Cerrar popup de carrito vacío
+    document.getElementById('empty-close')?.addEventListener('click', ()=>{
+      emptyOverlay.hidden = true;
+    });
+    emptyOverlay?.addEventListener('click', (e)=>{
+      if(e.target === emptyOverlay){ emptyOverlay.hidden = true; }
+    });
+
+    // Cerrar popup de éxito al clickear fuera (opcional)
+    overlay?.addEventListener('click', (e)=>{
+      if(e.target === overlay){ overlay.hidden = true; }
     });
 
     // ------- Arranque -------
