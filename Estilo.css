@@ -462,7 +462,7 @@ a:hover {
 .stars { letter-spacing: 2px; font-size: .95rem; color: #3C2313; }
 .stars .off { opacity: .35; }
 
-/* badges tipo "Sin TACC" / "Vegano" */
+/* badges tipo "Sin TACC" */
 .badge {
   display: inline-block;
   padding: 4px 10px;
@@ -472,40 +472,48 @@ a:hover {
   font-weight: 700;
   font-size: .8rem;
   margin-right: 6px;
-}
-/* === Fix alineación de checkboxes en filtros === */
-.filters .check{
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 12px 0;
+  
 }
 
-/* sobrescribe el label global (que es block) solo dentro de filtros */
-.filters .check label{
-  display: inline;
-  margin: 0;
-  font-weight: 700;
-  color: #3C2313;
-  cursor: pointer; /* clickeable el texto */
+/* ====== CATEGORÍAS EN PANEL DE FILTROS ====== */
+.filters .categories.as-filter{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.5rem;
+  margin-top:.5rem;
 }
 
-/* el checkbox no debe ocupar 100% de ancho */
-.filters .check input[type="checkbox"]{
-  width: 18px;
-  height: 18px;
-  flex: 0 0 auto;
-  accent-color: #7A2F29; /* color del tema (si el navegador lo soporta) */
+.filters .cat-btn{
+  appearance:none;
+  border:1px solid #d9c9bb;
+  background:#fff;
+  color:#4a2a1f;
+  padding:.4rem .7rem;
+  border-radius:999px;
+  font-size:.95rem;
+  line-height:1;
+  cursor:pointer;
+  transition:background .15s ease, border-color .15s ease, color .15s ease, transform .1s ease;
+}
+.filters .cat-btn:hover{ border-color:#bfa792; background:#f7efe8; }
+.filters .cat-btn[aria-pressed="true"]{ border-color:#7A2F29; background:#7A2F29; color:#fff; }/*categoria seleccionada*/
+
+/* Limpieza visual: quitamos estilos de checkboxes antiguos en filtros */
+.filters .field.check{ display:none !important; }
+
+/* Inputs del panel (coherencia visual) */
+.filters select,
+.filters input[type="number"]{
+  width:100%;
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid #432819;
+  background:#F3E5D8;
+  color:#2B1A12;
 }
 
-/* si usás <div class="field check"> también lo alineamos */
-.filters .field.check{
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 12px 0;
-}
-
+/* Ajuste del grid de precio */
+.filters .range{ display:grid; grid-template-columns:1fr 1fr; gap:.6rem; }
 
 /* precio + botón agregar */
 .product-card .footer {
@@ -546,20 +554,7 @@ a:hover {
   color: #3C2313;
 }
 
-/* ======== RESPONSIVE ======== */
-@media (max-width: 1100px) {
-  .catalog-layout { grid-template-columns: 280px 1fr; }
-  .products { grid-template-columns: repeat(2, minmax(240px, 1fr)); }
-}
-@media (max-width: 760px) {
-  .catalog-layout { grid-template-columns: 1fr; }
-  .filters { position: static; }
-  .toolbar { flex-direction: column; align-items: stretch; gap: 10px; }
-  .toolbar .sort { min-width: 0; width: 100%; }
-  .products { grid-template-columns: 1fr; }
-}
-
-//* ===== Popup Carrito centrado ===== */
+/* ===== Popup Carrito centrado ===== */
 .cart-overlay[hidden] { display: none !important; }
 
 .cart-overlay{
@@ -612,3 +607,89 @@ a:hover {
 .cp-btn:hover{transform:translateY(-1px); background:#8C3B34;}
 .cp-btn.light{background:#F3DEB5; color:#7A2F29; border:2px solid #E7CDB6;}
 .cp-btn.light:hover{background:#E7CDB6;}
+
+/* ==== Ajuste de imágenes en tarjetas ==== */
+.product-card .media {
+  width: 100%;
+  aspect-ratio: 3 / 2;        /* mantiene proporción 1536x1024 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #EEDFD2;
+  border-radius: 14px 14px 0 0;
+  padding: 8px;
+}
+
+.product-card .media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;        /* sin recorte ni distorsión */
+  transition: transform 0.3s ease;
+}
+
+.product-card .media img:hover {
+  transform: scale(2);
+}
+
+/* --- Toggle de ingredientes --- */
+.ingredients-toggle {
+  appearance: none;
+  background: none;
+  border: none;
+  color: #6b1c1c; /* bordo */
+  font-size: 0.95rem;
+  text-decoration: underline;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  margin-top: .25rem;
+  padding: 0;
+  transition: color .2s ease;
+}
+.ingredients-toggle:hover {color: #4d0f0f;}
+.ingredients-toggle .chev {transition: transform .25s ease;}
+.ingredients-toggle[aria-expanded="true"] .chev { transform: rotate(180deg);   }
+
+/* === Contenedor de ingredientes === */
+.ingredients {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: all .3s ease;
+}
+.ingredients.open {
+  max-height: 100px; /* se puede ajustar según el texto */
+  opacity: 1;
+}
+
+.ingredients p {
+    margin-top: .25rem;
+    color: #3b1f1f;
+    text-align: left;
+    line-height: 1.4;
+}
+
+.top-actions{position:absolute; right:1rem; top:.8rem; display:flex; align-items:center; gap:.75rem;}
+.cart-link{position:relative; display:inline-flex; align-items:center; gap:.4rem; text-decoration:none; color:inherit;}
+.cart-badge{position:absolute; top:-6px; right:-8px; font-size:.7rem; background:#e11; color:#fff; border-radius:999px; padding:.1rem .35rem; line-height:1;}
+.categories{display:flex; flex-wrap:wrap; gap:.5rem; align-items:center}
+.categories .label{font-weight:600; margin-right:.25rem}
+.cat-btn{border:1px solid #ddd; background:#fff; padding:.35rem .6rem; border-radius:999px; cursor:pointer}
+.cat-btn[aria-pressed="true"]{border-color:#222; background:#222; color:#fff}
+
+
+/* ======== RESPONSIVE ======== */
+@media (max-width: 1100px) {
+  .catalog-layout { grid-template-columns: 280px 1fr; }
+  .products { grid-template-columns: repeat(2, minmax(240px, 1fr)); }
+}
+@media (max-width: 760px) {
+  .catalog-layout { grid-template-columns: 1fr; }
+  .filters { position: static; }
+  .toolbar { flex-direction: column; align-items: stretch; gap: 10px; }
+  .toolbar .sort { min-width: 0; width: 100%; }
+  .products { grid-template-columns: 1fr; }
+}
+@media (max-width:600px){ .top-actions{top:.5rem; right:.5rem} }
