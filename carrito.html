@@ -5,26 +5,26 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Carrito · EneBar</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="Estilo.css"><!-- tu hoja principal -->
+  <link rel="stylesheet" href="Estilo.css">
   <style>
     /* ====== Carrito (estilos específicos de esta página) ====== */
-    .cart-wrap{max-width: 1100px; margin:24px auto; padding:0 16px;}
-    .cart-title{font-size:1.7rem; font-weight:800; color:#3C2313; text-align:center; margin-bottom:18px;}
+    .cart-wrap{max-width:1100px;margin:24px auto;padding:0 16px;}
+    .cart-title{font-size:1.7rem;font-weight:800;color:#3C2313;text-align:center;margin-bottom:18px;}
 
-    .cart-grid{display:grid; grid-template-columns: 1fr 320px; gap:24px;}
-    .cart-list{background:#FAEFE6; border:1px solid #E0CDBB; border-radius:12px; box-shadow:0 6px 14px rgba(0,0,0,.06);}
-    .cart-empty{padding:28px; text-align:center; color:#3C2313;}
+    .cart-grid{display:grid;grid-template-columns:1fr 320px;gap:24px;}
+    .cart-list{background:#FAEFE6;border:1px solid #E0CDBB;border-radius:12px;box-shadow:0 6px 14px rgba(0,0,0,.06);}
+    .cart-empty{padding:28px;text-align:center;color:#3C2313;}
 
-    .cart-item{display:grid; grid-template-columns: 92px 1fr 140px 28px; gap:12px; align-items:center; padding:14px 16px; border-bottom:1px solid #E7CDB6;}
+    .cart-item{display:grid;grid-template-columns:92px 1fr 140px 28px;gap:12px;align-items:center;padding:14px 16px;border-bottom:1px solid #E7CDB6;}
     .cart-item:last-child{border-bottom:none;}
     .ci-img{width:92px;height:92px;border-radius:10px;object-fit:cover;background:#EEDFD2;}
     .ci-name{font-weight:800;color:#3C2313;margin-bottom:4px;}
     .ci-meta{opacity:.9;color:#3C2313;font-size:.95rem;}
 
-    .qty{display:inline-flex; align-items:center; border:1px solid #432819; border-radius:10px; overflow:hidden; background:#F3E5D8;}
+    .qty{display:inline-flex;align-items:center;border:1px solid #432819;border-radius:10px;overflow:hidden;background:#F3E5D8;}
     .qty button{background:transparent;border:none;padding:6px 10px;cursor:pointer;color:#7A2F29;font-weight:800;font-size:1rem;}
     .qty input{width:46px;text-align:center;border:none;background:transparent;padding:6px 0;color:#2B1A12;font-weight:700;}
-    .ci-price{text-align:right; font-weight:800; color:#2B1A12;}
+    .ci-price{text-align:right;font-weight:800;color:#2B1A12;}
     .ci-remove{background:transparent;border:none;color:#7A2F29;font-size:1.2rem;cursor:pointer;}
 
     .cart-summary{background:#FAEFE6;border:1px solid #E0CDBB;border-radius:12px;box-shadow:0 6px 14px rgba(0,0,0,.06);padding:16px;}
@@ -35,7 +35,7 @@
     .btn-ghost{width:100%;padding:10px 16px;border-radius:10px;border:2px solid #E7CDB6;background:#F3DEB5;color:#7A2F29;font-weight:800;cursor:pointer;}
     .back-link{display:inline-flex;gap:8px;align-items:center;margin-bottom:12px;color:#7A2F29;font-weight:800;text-decoration:none;}
 
-    @media (max-width: 900px){ .cart-grid{grid-template-columns:1fr;} .cart-item{grid-template-columns:92px 1fr 100px 28px;} }
+    @media (max-width:900px){.cart-grid{grid-template-columns:1fr}.cart-item{grid-template-columns:92px 1fr 100px 28px}}
 
     /* ====== Popup genérico (éxito y vacío) ====== */
     .checkout-overlay[hidden]{display:none;}
@@ -51,10 +51,28 @@
     .ck-btn.light:hover{background:#E7CDB6;}
   </style>
 </head>
+
 <body class="center">
   <!-- Header -->
   <header class="hero">
     <a href="index.html"><img src="logobanner.png" alt="Logo EneBar" class="logo"></a>
+
+    <!-- Acciones derechas: usuario + carrito -->
+    <div class="top-actions">
+      <!-- Menú Usuario -->
+      <div class="user-menu">
+        <button id="user-btn" class="icon-btn" aria-haspopup="true" aria-expanded="false" aria-controls="user-dropdown" title="Cuenta">
+          <i class="bi bi-person-circle" style="font-size:2rem;"></i>
+        </button>
+        <div id="user-dropdown" class="dropdown" role="menu" hidden></div>
+      </div>
+
+      <!-- Carrito (badge se actualiza con JS) -->
+      <a class="cart-link" href="carrito.html" aria-label="Ir al carrito">
+        <i class="bi bi-cart3" style="font-size:2rem;"></i>
+        <span id="cart-badge" class="cart-badge" aria-live="polite">0</span>
+      </a>
+    </div>
   </header>
 
   <main class="cart-wrap">
@@ -80,29 +98,23 @@
 
   <!-- Footer breve -->
   <footer class="site-footer">
-      <div class="footer-wrap">
-        <p class="footer-eyebrow">Conoce más sobre</p>
-        <img src="logofooter.png" alt="Logo EneBar" class="footer-logo">
-        <ul class="footer-links">
-          <li><a href="#">¿Quienes somos?</a></li>
-          <li><a href="#">¿Dónde encontrarnos?</a></li>
-          <li><a href="productos.html">Nuestras Barritas</a></li>
-          <li><a href="#">Contactanos</a></li>
-          <li><a href="#">Nuestras Redes</a></li>
-        </ul>
-        <div class="footer-icons">
-          <a href="https://instagram.com" aria-label="Instagram" target="_blank" rel="noopener">
-            <i class="bi bi-instagram" style="font-size:1.3rem;"></i>
-          </a>
-          <a href="https://twitter.com" aria-label="Twitter" target="_blank" rel="noopener">
-            <i class="bi bi-twitter" style="font-size:1.3rem;"></i>
-          </a>
-          <a href="mailto:contacto@enebar.com" aria-label="Email">
-            <i class="bi bi-envelope" style="font-size:1.3rem;"></i>
-          </a>
-        </div>
+    <div class="footer-wrap">
+      <p class="footer-eyebrow">Conoce más sobre</p>
+      <img src="logofooter.png" alt="Logo EneBar" class="footer-logo">
+      <ul class="footer-links">
+        <li><a href="#">¿Quienes somos?</a></li>
+        <li><a href="#">¿Dónde encontrarnos?</a></li>
+        <li><a href="productos.html">Nuestras Barritas</a></li>
+        <li><a href="#">Contactanos</a></li>
+        <li><a href="#">Nuestras Redes</a></li>
+      </ul>
+      <div class="footer-icons">
+        <a href="https://instagram.com" aria-label="Instagram" target="_blank" rel="noopener"><i class="bi bi-instagram" style="font-size:1.3rem;"></i></a>
+        <a href="https://twitter.com" aria-label="Twitter" target="_blank" rel="noopener"><i class="bi bi-twitter" style="font-size:1.3rem;"></i></a>
+        <a href="mailto:contacto@enebar.com" aria-label="Email"><i class="bi bi-envelope" style="font-size:1.3rem;"></i></a>
       </div>
-    </footer>
+    </div>
+  </footer>
 
   <!-- Popup de compra realizada -->
   <div id="checkout-overlay" class="checkout-overlay" hidden>
@@ -128,21 +140,86 @@
   </div>
 
   <script>
-    // ------- Carrito en localStorage -------
+    /* ================= Usuario (mismo comportamiento que productos) ================= */
+    const cartBadge = document.getElementById('cart-badge');
+    const userBtn = document.getElementById('user-btn');
+    const userDropdown = document.getElementById('user-dropdown');
+
+    function getCurrentUser(){
+      try{
+        return JSON.parse(localStorage.getItem('usuario')) ||
+               JSON.parse(localStorage.getItem('enebar_user'));
+      }catch{ return null; }
+    }
+
+    function renderUserMenu(){
+      if(!userDropdown) return;
+      const u = getCurrentUser();
+      if(u){
+        const nombre = (u.nombre?.trim() && u.nombre.trim()) || (u.email?.split('@')[0] || 'Usuario');
+        userDropdown.innerHTML = `
+          <div class="dropdown-header" style="
+            display:flex;align-items:center;justify-content:center;gap:.5rem;
+            font-weight:800;text-align:center;padding:.5rem .75rem;color:#2B1A12;">
+            <i class="bi bi-person" aria-hidden="true" style="font-size:1.1rem;"></i>
+            <span>${nombre}</span>
+          </div>
+          <hr class="cp-sep" style="margin:.35rem 0;">
+          <button class="dropdown-item" role="menuitem" id="user-logout" style="
+            display:flex;align-items:center;justify-content:center;gap:.45rem;
+            font-weight:700;color:#8B2C20;">
+            <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+          </button>
+        `;
+        document.getElementById('user-logout')?.addEventListener('click', () => {
+          try{
+            localStorage.removeItem('usuario');
+            localStorage.removeItem('enebar_user');
+          }catch{}
+          closeUserMenu();
+          location.href = 'index.html';
+        }, { once: true });
+      } else {
+        userDropdown.innerHTML = `
+          <a class="dropdown-item" role="menuitem" href="Login.html">
+            <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
+          </a>
+          <a class="dropdown-item" role="menuitem" href="index.html">
+            <i class="bi bi-person-plus"></i> Registrarme
+          </a>
+        `;
+      }
+    }
+
+    function openUserMenu(){ if(!userDropdown) return; renderUserMenu(); userDropdown.hidden = false; userBtn?.setAttribute('aria-expanded','true'); }
+    function closeUserMenu(){ if(!userDropdown) return; userDropdown.hidden = true; userBtn?.setAttribute('aria-expanded','false'); }
+    function toggleUserMenu(){ if(!userDropdown) return; (userDropdown.hidden ? openUserMenu() : closeUserMenu()); }
+
+    userBtn?.addEventListener('click', toggleUserMenu);
+    document.addEventListener('click', (e) => {
+      if(!userDropdown || !userBtn) return;
+      const inside = userDropdown.contains(e.target) || userBtn.contains(e.target);
+      if(!inside) closeUserMenu();
+    });
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeUserMenu(); });
+
+    /* ================= Carrito ================= */
     const CART_KEY = 'enebar_cart';
     const money = n => n.toLocaleString('es-AR',{style:'currency',currency:'ARS'});
 
     function loadCart(){
       try{
         const raw = localStorage.getItem(CART_KEY);
-        if(!raw) return [];
-        const arr = JSON.parse(raw);
+        const arr = raw ? JSON.parse(raw) : [];
         return Array.isArray(arr) ? arr : [];
       }catch{ return []; }
     }
     function saveCart(items){ localStorage.setItem(CART_KEY, JSON.stringify(items)); }
+    function cartQty(items){ return items.reduce((a,i)=>a+(i.qty||1),0); }
 
     let cart = loadCart();
+    // badge inicial
+    cartBadge && (cartBadge.textContent = String(cartQty(cart)));
 
     // ------- Render -------
     const list = document.getElementById('cart-list');
@@ -154,6 +231,7 @@
         list.innerHTML = '<div class="cart-empty">Tu carrito está vacío.</div>';
         sumSub.textContent = money(0);
         sumTotal.textContent = money(0);
+        cartBadge && (cartBadge.textContent = '0');
         return;
       }
       list.innerHTML = cart.map((x,i)=>`
@@ -176,6 +254,7 @@
       const subtotal = cart.reduce((s,it)=> s + (it.price||0)*(it.qty||1), 0);
       sumSub.textContent = money(subtotal);
       sumTotal.textContent = money(subtotal);
+      cartBadge && (cartBadge.textContent = String(cartQty(cart)));
 
       list.querySelectorAll('.cart-item').forEach(row=>{
         const i = +row.dataset.i;
@@ -204,10 +283,9 @@
 
     btnCheckout.addEventListener('click', ()=>{
       if(!cart.length){
-        emptyOverlay.hidden = false;   // mostrar popup vacío
+        emptyOverlay.hidden = false;
         return;
       }
-      // aquí iría tu POST/checkout real; simulamos éxito:
       overlay.hidden = false;
       localStorage.removeItem(CART_KEY);
       cart = [];
@@ -215,19 +293,12 @@
     });
 
     // Cerrar popup de carrito vacío
-    document.getElementById('empty-close')?.addEventListener('click', ()=>{
-      emptyOverlay.hidden = true;
-    });
-    emptyOverlay?.addEventListener('click', (e)=>{
-      if(e.target === emptyOverlay){ emptyOverlay.hidden = true; }
-    });
+    document.getElementById('empty-close')?.addEventListener('click', ()=>{ emptyOverlay.hidden = true; });
+    emptyOverlay?.addEventListener('click', (e)=>{ if(e.target === emptyOverlay){ emptyOverlay.hidden = true; }});
+    overlay?.addEventListener('click', (e)=>{ if(e.target === overlay){ overlay.hidden = true; }});
 
-    // Cerrar popup de éxito al clickear fuera (opcional)
-    overlay?.addEventListener('click', (e)=>{
-      if(e.target === overlay){ overlay.hidden = true; }
-    });
-
-    // ------- Arranque -------
+    // Arranque
+    renderUserMenu();   // por si ya está logueado
     renderCart();
   </script>
 </body>
