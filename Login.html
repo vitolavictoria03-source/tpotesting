@@ -87,71 +87,85 @@
       <button class="btn primary" id="missingClose">Entendido</button>
     </div>
   </div>
-
   <script>
-    // Usuarios registrados
-    const USERS = [
-      { email: 'vitolavictoria03@gmail.com',    password: 'Vicky012' },
-      { email: 'amorenadelfina15@gmail.com',   password: 'Delfi123' },
-      { email: 'luciano.gadea@gmail.com',  password: 'Lucho1234' }
-    ];
+  // Usuarios registrados (base hardcode)
+  const USERS = [
+    { email: 'vitolavictoria03@gmail.com',  password: 'Vicky012' },
+    { email: 'amorenadelfina15@gmail.com', password: 'Delfi123' },
+    { email: 'luciano.gadea@gmail.com',    password: 'Lucho1234' }
+  ];
 
-    // Helpers modales
-    function showModal(id){ const el=document.getElementById(id); if(!el) return; el.style.display='flex'; el.setAttribute('aria-hidden','false'); }
-    function hideModal(id){ const el=document.getElementById(id); if(!el) return; el.style.display='none'; el.setAttribute('aria-hidden','true'); }
+  // Helpers modales
+  function showModal(id){ const el=document.getElementById(id); if(!el) return; el.style.display='flex'; el.setAttribute('aria-hidden','false'); }
+  function hideModal(id){ const el=document.getElementById(id); if(!el) return; el.style.display='none'; el.setAttribute('aria-hidden','true'); }
 
-    // Mostrar/ocultar contraseña
-    const pwd = document.getElementById('password');
-    const togglePwd = document.getElementById('togglePwd');
-    togglePwd?.addEventListener('click', () => {
-        const isPwd = pwd.type === 'password';
-        pwd.type = isPwd ? 'text' : 'password';
-        togglePwd.innerHTML = isPwd
-          ? '<i class="bi bi-eye" aria-hidden="true"></i>'       // 👁️ ojo abierto al mostrar
-          : '<i class="bi bi-eye-slash" aria-hidden="true"></i>'; // 👁️ tachado al ocultar
-    });
+  // Mostrar/ocultar contraseña
+  const pwd = document.getElementById('password');
+  const togglePwd = document.getElementById('togglePwd');
+  togglePwd?.addEventListener('click', () => {
+    const isPwd = pwd.type === 'password';
+    pwd.type = isPwd ? 'text' : 'password';
+    togglePwd.innerHTML = isPwd
+      ? '<i class="bi bi-eye" aria-hidden="true"></i>'
+      : '<i class="bi bi-eye-slash" aria-hidden="true"></i>';
+  });
 
-    // Login
-    const form = document.getElementById('form-iniciar');
+  // === Usuarios registrados (persistidos por Registro) ===
+  function getRegisteredUsers(){
+    try { return JSON.parse(localStorage.getItem('registeredUsers')) || []; }
+    catch { return []; }
+  }
 
-    form?.addEventListener('submit', (e)=>{
-      e.preventDefault();
+  // Login
+  const form = document.getElementById('form-iniciar');
 
-      const email = (document.getElementById('email').value || '').trim().toLowerCase();
-      const password = document.getElementById('password').value || '';
+  form?.addEventListener('submit', (e)=>{
+    e.preventDefault();
 
-      // NUEVO: popup si faltan datos
-      if(!email || !password){
-        showModal('missingOverlay');
-        document.getElementById('missingClose').focus();
-        return;
-      }
+    const email = (document.getElementById('email').value || '').trim().toLowerCase();
+    const password = document.getElementById('password').value || '';
 
-      const found = USERS.find(u => u.email.toLowerCase() === email && u.password === password);
+    // Popup si faltan datos
+    if(!email || !password){
+      showModal('missingOverlay');
+      document.getElementById('missingClose').focus();
+      return;
+    }
 
-      if(found){
-        showModal('okOverlay');
-        document.getElementById('okContinue').addEventListener('click', () => {
-          window.location.href = 'productos.html';
-        }, { once: true });
-      } else {
-        showModal('errorOverlay');
-        document.getElementById('errorClose').focus();
-      }
-    });
+    const found = USERS.find(u => u.email.toLowerCase() === email && u.password === password);
 
-    // Cerrar modales
-    document.getElementById('errorClose')?.addEventListener('click', ()=> hideModal('errorOverlay'));
-    document.getElementById('missingClose')?.addEventListener('click', ()=> hideModal('missingOverlay'));
+    if(found){
+      // Intentar traer el nombre desde 'registeredUsers'; si no, usar el alias del email
+      const regs = getRegisteredUsers();
+      const regUser = regs.find(u => u.email === email);
+      const nombre = (regUser?.nombre || '').trim() || email.split('@')[0];
 
-    // Cerrar con Escape
-    document.addEventListener('keydown', (ev)=>{
-      if(ev.key === 'Escape'){
-        hideModal('errorOverlay');
-        hideModal('okOverlay');
-        hideModal('missingOverlay');
-      }
-    });
-  </script>
+      // Guardar sesión unificada para todas las pantallas
+      localStorage.setItem('usuario', JSON.stringify({ nombre, email }));
+
+      showModal('okOverlay');
+      document.getElementById('okContinue').addEventListener('click', () => {
+        window.location.href = 'productos.html';
+      }, { once: true });
+    } else {
+      showModal('errorOverlay');
+      document.getElementById('errorClose').focus();
+    }
+  });
+
+  // Cerrar modales
+  document.getElementById('errorClose')?.addEventListener('click', ()=> hideModal('errorOverlay'));
+  document.getElementById('missingClose')?.addEventListener('click', ()=> hideModal('missingOverlay'));
+
+  // Cerrar con Escape
+  document.addEventListener('keydown', (ev)=>{
+    if(ev.key === 'Escape'){
+      hideModal('errorOverlay');
+      hideModal('okOverlay');
+      hideModal('missingOverlay');
+    }
+  });
+</script>
+
 </body>
 </html>
