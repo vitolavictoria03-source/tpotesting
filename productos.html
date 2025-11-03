@@ -187,10 +187,10 @@
     const cpClose = $('#cp-close');
     const cpContinue = $('#cp-continue');
 
-    // ===== Logout Modal (igual estilo que carrito) =====
+   // ===== Logout Modal (igual estilo que carrito) =====
     const loOverlay = document.getElementById('logout-overlay');
-    const loClose   = document.getElementById('lo-close');
-    const loHome    = document.getElementById('lo-home');
+    const loClose   = document.querySelector('#logout-overlay .cp-close');
+    const loHome    = document.getElementById('go-home');
 
     function showLogoutModal(){
       if(!loOverlay) return;
@@ -204,11 +204,19 @@
       };
 
       loClose?.addEventListener('click', redirect, { once:true });
-      loOverlay.addEventListener('click', (e) => { if(e.target === loOverlay) redirect(); }, { once:true });
+      loOverlay.addEventListener('click', (e) => {
+        if (e.target === loOverlay) redirect();
+      }, { once:true });
 
-      const onEsc = (e) => { if(e.key === 'Escape'){ document.removeEventListener('keydown', onEsc); redirect(); } };
+      const onEsc = (e) => {
+        if (e.key === 'Escape') {
+          document.removeEventListener('keydown', onEsc);
+          redirect();
+        }
+      };
       document.addEventListener('keydown', onEsc);
-      loHome?.addEventListener('click', () => {}, { once:true });
+
+      loHome?.addEventListener('click', redirect, { once:true });
     }
 
     // Estado de filtros
@@ -441,10 +449,61 @@
     // ====== USER MENU & LOGOUT ======
     const userBtn = document.getElementById('user-btn');
     const userDropdown = document.getElementById('user-dropdown');
-    const logoutBtn = document.getElementById('user-logout');
+
+    // Lee el usuario guardado (compatibilidad con dos claves)
+    function getCurrentUser(){
+      try {
+        return JSON.parse(localStorage.getItem('usuario')) ||
+               JSON.parse(localStorage.getItem('enebar_user'));
+      } catch { return null; }
+    }
+
+    // Pinta el dropdown con: NOMBRE ARRIBA + botón Cerrar sesión
+    function renderUserMenu(){
+      if (!userDropdown) return;
+      const u = getCurrentUser();
+      if (u) {
+        const nombre = (u.nombre?.trim() && u.nombre.trim()) || (u.email?.split('@')[0] || 'Usuario');
+
+        userDropdown.innerHTML = `
+          <div class="dropdown-header" style="
+            display:flex;align-items:center;justify-content:center;gap:.5rem;
+            font-weight:800;text-align:center;padding:.5rem .75rem;color:#2B1A12;">
+            <i class="bi bi-person" aria-hidden="true" style="font-size:1.1rem;"></i>
+            <span>${nombre}</span>
+          </div>
+          <hr class="cp-sep" style="margin:.35rem 0;">
+          <button class="dropdown-item" role="menuitem" id="user-logout" style="
+            display:flex;align-items:center;justify-content:center;gap:.45rem;
+            font-weight:700;color:#8B2C20;">
+            <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+          </button>
+        `;
+
+        // Enlazamos logout ahora que existe el botón
+        document.getElementById('user-logout')?.addEventListener('click', () => {
+          try {
+            localStorage.removeItem('usuario');
+            localStorage.removeItem('enebar_user');
+          } catch {}
+          closeUserMenu();
+          showLogoutModal();
+        }, { once:true });
+      } else {
+        userDropdown.innerHTML = `
+          <a class="dropdown-item" role="menuitem" href="Login.html">
+            <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
+          </a>
+          <a class="dropdown-item" role="menuitem" href="index.html">
+            <i class="bi bi-person-plus"></i> Registrarme
+          </a>
+        `;
+      }
+    }
 
     function openUserMenu() {
       if (!userDropdown) return;
+      renderUserMenu(); // <-- pintamos contenido actualizado
       userDropdown.hidden = false;
       userBtn?.setAttribute('aria-expanded', 'true');
     }
@@ -466,16 +525,6 @@
     });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeUserMenu(); });
     userBtn?.addEventListener('click', toggleUserMenu);
-
-    logoutBtn?.addEventListener('click', () => {
-      try {
-        localStorage.removeItem('enebar_user');
-        // Si querés también limpiar carrito al salir, descomenta:
-        // localStorage.removeItem(CART_KEY);
-      } catch {}
-      closeUserMenu();
-      showLogoutModal();
-    });
 
     // ===== Delegaciones de eventos =====
     catalog.addEventListener('click', (e) => {
